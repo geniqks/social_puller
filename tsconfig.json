@@ -1,0 +1,24 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "outDir": "build",
+    "rootDir": ".",
+    "strict": true,
+    "types": ["reflect-metadata"],
+    "baseUrl": ".",
+    "paths": {
+      "@api*": ["src/api*"],
+      "@cli*": ["src/cli*"],
+      "@config*": ["src/config*"],
+      "@constants*": ["src/constants*"],
+      "@decorators*": ["src/decorators*"],
+      "@drivers*": ["src/drivers*"],
+      "@services*": ["src/services*"],
+      "@utils*": ["src/utils*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}
