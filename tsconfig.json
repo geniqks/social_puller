@@ -17,7 +17,8 @@
       "@decorators*": ["src/decorators*"],
       "@drivers*": ["src/drivers*"],
       "@services*": ["src/services*"],
-      "@utils*": ["src/utils*"]
+      "@utils*": ["src/utils*"],
+      "@start*": ["src/start*"]
     }
   },
   "include": ["src/**/*.ts"]
