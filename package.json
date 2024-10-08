@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "nodemon --config nodemon.json",
     "build": "tsc -p ."
   },
   "dependencies": {
@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.3",
-    "fastify-print-routes": "^3.2.0",
     "gts": "^3.1.1",
+    "nodemon": "^3.1.7",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
     "tsconfig-paths": "^4.2.0",
