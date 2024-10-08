@@ -2,7 +2,7 @@ import { bind } from "@decorators/bind.decorator";
 import Fastify, { FastifyInstance } from "fastify";
 import { injectable } from "inversify";
 
-type ProcessEnvKeys = typeof process.env.ENV;
+type ProcessEnvKeys = NonNullable<typeof process.env.ENV>;
 const envToLogger: Record<ProcessEnvKeys, any> = {
   development: {
     transport: {
@@ -26,8 +26,9 @@ export class Server {
   }
 
   constructor() {
+    const env: ProcessEnvKeys = process.env.ENV ?? "development";
     this._fastify = Fastify({
-      logger: envToLogger[process.env.ENV],
+      logger: envToLogger[env],
     });
   }
 }

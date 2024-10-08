@@ -14,7 +14,7 @@ export class ApiHandler {
       dir: path.join(__dirname, "controllers"),
     });
 
-    const port = parseInt(process.env.PORT);
+    const port = parseInt(process.env.PORT ?? "3000");
     this.server.fastify.listen({ port }, () =>
       console.log("Server is running")
     );

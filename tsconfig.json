@@ -6,7 +6,7 @@
     "lib": ["es6", "dom"],
     "outDir": "build",
     "rootDir": ".",
-    "strict": false,
+    "strict": true,
     "types": ["reflect-metadata"],
     "baseUrl": ".",
     "paths": {
