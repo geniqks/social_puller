@@ -2,19 +2,19 @@ import { bind } from "@decorators/bind.decorator";
 import Fastify, { FastifyInstance } from "fastify";
 import { injectable } from "inversify";
 
-// type ProcessEnvKeys = typeof process.env.ENV;
-// const envToLogger: Record<any, any> = {
-//   development: {
-//     transport: {
-//       target: "pino-pretty",
-//       options: {
-//         translateTime: "HH:MM:ss Z",
-//         ignore: "pid,hostname",
-//       },
-//     },
-//   },
-//   production: true,
-// };
+type ProcessEnvKeys = typeof process.env.ENV;
+const envToLogger: Record<ProcessEnvKeys, any> = {
+  development: {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
+      },
+    },
+  },
+  production: true,
+};
 
 @bind("singleton")
 @injectable()
@@ -26,6 +26,8 @@ export class Server {
   }
 
   constructor() {
-    this._fastify = Fastify();
+    this._fastify = Fastify({
+      logger: envToLogger[process.env.ENV],
+    });
   }
 }
