@@ -48,6 +48,11 @@
     ajv-formats "^3.0.1"
     fast-uri "^3.0.0"
 
+"@fastify/autoload@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.npmjs.org/@fastify/autoload/-/autoload-6.0.2.tgz"
+  integrity sha512-efRwk2KKTPERxHEnzabK+w2pGxBExCCYixPYUMqtLd++Xsoh4h5Rrq8D2xZDq2BQ8hTFI1rzGLkHWsz40wgoWA==
+
 "@fastify/error@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@fastify/error/-/error-4.0.0.tgz"
@@ -243,6 +248,11 @@ acorn-jsx@^5.3.1:
   version "7.4.1"
   resolved "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
+
+acquerello@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.npmjs.org/acquerello/-/acquerello-2.0.8.tgz"
+  integrity sha512-+Xm1S7eutT6OzPVuW4jhpS0YlhdnEFVHOZOiVghLGDk7rLoQc1MQmT4jsVkuDCTbqIZy21gnsrTXY9Ya2sQvtw==
 
 ajv-formats@^3.0.1:
   version "3.0.1"
@@ -873,6 +883,20 @@ fast-uri@^3.0.0, fast-uri@^3.0.1:
   version "3.0.2"
   resolved "https://registry.npmjs.org/fast-uri/-/fast-uri-3.0.2.tgz"
   integrity sha512-GR6f0hD7XXyNJa25Tb9BuIdN0tdr+0BMi6/CJPH3wJO1JjNG3n/VsSw38AwRdKZABm8lGbPfakLRkYzx2V9row==
+
+fastify-plugin@^4.5.1:
+  version "4.5.1"
+  resolved "https://registry.npmjs.org/fastify-plugin/-/fastify-plugin-4.5.1.tgz"
+  integrity sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==
+
+fastify-print-routes@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/fastify-print-routes/-/fastify-print-routes-3.2.0.tgz"
+  integrity sha512-vbNliaT+SlZlH9sPYR1FYe3AJptbadf20/SjmramOxoeS6fdrAkMQu0H0/ZENaU4ruBlxCrUs0hUfV2J0dGyZw==
+  dependencies:
+    acquerello "^2.0.8"
+    fastify-plugin "^4.5.1"
+    table "^6.8.2"
 
 fastify@^5.0.0:
   version "5.0.0"
@@ -2131,7 +2155,7 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-table@^6.0.9:
+table@^6.0.9, table@^6.8.2:
   version "6.8.2"
   resolved "https://registry.npmjs.org/table/-/table-6.8.2.tgz"
   integrity sha512-w2sfv80nrAh2VCbqR5AK27wswXhqcck2AhfnNW76beQXskGZ1V12GwS//yYVa3d3fcvAip2OUnbDAjW2k3v9fA==
