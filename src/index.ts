@@ -5,8 +5,7 @@ IocContainer.initContainer();
 
 import { ApiHandler } from "@api/";
 import * as dotenv from "dotenv";
-
-dotenv.config();
+dotenv.config({ path: ".env.local" });
 
 const apiHandler = IocContainer.container.get(ApiHandler);
 apiHandler.start();
