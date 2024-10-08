@@ -1,6 +1,5 @@
 import { bind } from "@decorators/bind.decorator";
 import autoload from "@fastify/autoload";
-import fastifyPrintRoutes from "fastify-print-routes";
 import { injectable } from "inversify";
 import * as path from "path";
 import { Server } from "./server";
@@ -15,9 +14,6 @@ export class ApiHandler {
       dir: path.join(__dirname, "controllers"),
     });
 
-    await this.server.fastify.register(fastifyPrintRoutes);
-
     await this.server.fastify.listen({ port: 3000 });
-    console.log("Server started");
   }
 }

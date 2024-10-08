@@ -1,15 +1,10 @@
-import { FastifyPluginOptions } from "fastify";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 export default async function (
-  fastify: any,
+  fastify: FastifyInstance,
   _opts: FastifyPluginOptions
 ): Promise<void> {
-  console.log("cc");
-
   fastify.get("/tt", async function (request, reply) {
-    console.log("slaut");
     return "this is an example";
   });
 }
-
-console.log("reddit");
