@@ -13,6 +13,12 @@ export interface IProcessEnv {
   INSTAGRAM_CLIENT_SECRET: string;
   MONGO_URI: string;
   PORT: string;
+  REDDIT_CLIENT_ID: string;
+  REDDIT_CLIENT_SECRET: string;
+  REDDIT_PASSWORD: string;
+  REDDIT_REDIRECT_URI: string;
+  REDDIT_USERNAME: string;
+  REDDIT_USER_AGENT: string;
   TWITTER_BEARER_TOKEN: string;
 }
 

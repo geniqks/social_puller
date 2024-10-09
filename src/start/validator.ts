@@ -8,5 +8,11 @@ export default (): Record<keyof IProcessEnv, z.ZodType<unknown>> => ({
   INSTAGRAM_CLIENT_SECRET: z.string(),
   MONGO_URI: z.string(),
   PORT: z.string().transform(Number),
+  REDDIT_CLIENT_ID: z.string(),
+  REDDIT_CLIENT_SECRET: z.string(),
+  REDDIT_PASSWORD: z.string(),
+  REDDIT_REDIRECT_URI: z.string(),
+  REDDIT_USERNAME: z.string(),
+  REDDIT_USER_AGENT: z.string(),
   TWITTER_BEARER_TOKEN: z.string(),
 });
