@@ -5,7 +5,7 @@ import {
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { IocContainer } from "src/containers/inversify.container";
 type CallbackQuery = FastifyRequest<{
   Querystring: {
@@ -18,10 +18,7 @@ export default async function (
   _opts: FastifyPluginOptions
 ): Promise<void> {
   const redditDriver = IocContainer.container.get(RedditDriver);
-  fastify.get("/community", async function (request, reply) {
-    return "this is an example";
-  });
-
+  // #region Authentification
   fastify.get(
     "/auth",
     async function (_request: FastifyRequest, reply: FastifyReply) {
@@ -38,11 +35,16 @@ export default async function (
 
       if (hasBeenAuthorized) {
         reply.code(StatusCodes.OK)
-        reply.send({ message: "Authorized" })
+        reply.send({ message: ReasonPhrases.OK })
       } else {
         reply.code(StatusCodes.UNAUTHORIZED)
-        reply.send({ message: "Unauthorized" })
+        reply.send({ message: ReasonPhrases.UNAUTHORIZED })
       }
     }
   );
+  // #endregion
+
+  fastify.get("/community", async function (request, reply) {
+    return "this is an example";
+  });
 }

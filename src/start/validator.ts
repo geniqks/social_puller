@@ -14,5 +14,6 @@ export default (): Record<keyof IProcessEnv, z.ZodType<unknown>> => ({
   REDDIT_REDIRECT_URI: z.string(),
   REDDIT_USERNAME: z.string(),
   REDDIT_USER_AGENT: z.string(),
+  REDDIT_USER_TOKEN: z.string().optional(),
   TWITTER_BEARER_TOKEN: z.string(),
 });
