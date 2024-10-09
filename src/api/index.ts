@@ -1,5 +1,7 @@
 import { bind } from "@decorators/bind.decorator";
 import autoload from "@fastify/autoload";
+import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
 import { ConfigService } from "@services/config.service";
 import { injectable } from "inversify";
 import * as path from "path";
@@ -13,14 +15,26 @@ export class ApiHandler {
     private readonly server: Server
   ) {}
 
-  public async start(): Promise<void> {
-    await this.server.fastify.register(autoload, {
-      dir: path.join(__dirname, "controllers"),
-    });
+  public async init(): Promise<void> {
+    await this.registerPlugins();
 
     const port = this.configService.get<number>("PORT");
     this.server.fastify.listen({ port }, () =>
       console.log("Server is running")
     );
+  }
+
+  private async registerPlugins(): Promise<void> {
+    this.server.fastify.register(helmet, {
+      global: true,
+    });
+
+    await this.server.fastify.register(cors, {
+      origin: "*",
+    });
+
+    await this.server.fastify.register(autoload, {
+      dir: path.join(__dirname, "controllers"),
+    });
   }
 }

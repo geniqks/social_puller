@@ -12,5 +12,5 @@ dotenv.config({ path: ".env.local" });
 const env = IocContainer.container.get(Environment);
 env.process(envSchema());
 
-const apiHandler = IocContainer.container.get(ApiHandler);
-apiHandler.start();
+const api = IocContainer.container.get(ApiHandler);
+api.init();
