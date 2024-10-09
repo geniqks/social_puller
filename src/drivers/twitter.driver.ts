@@ -12,6 +12,6 @@ export class TwitterDriver extends BaseDriver {
 
   public test() {
     this.instagramDriver.test();
-    console.log("TwitterDriver");
+    console.log("TwitterDriver"); // TODO: remove this later
   }
 }

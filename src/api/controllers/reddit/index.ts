@@ -8,7 +8,6 @@ import {
 } from "fastify";
 import * as fs from "fs";
 import { IocContainer } from "src/containers/inversify.container";
-
 type CallbackQuery = FastifyRequest<{
   Querystring: {
     code: string;
@@ -19,11 +18,12 @@ export default async function (
   fastify: FastifyInstance,
   _opts: FastifyPluginOptions
 ): Promise<void> {
+  // TODO: toute la logique d'oauth il faudra la déplacer dans le RedditDriver
   const configService = IocContainer.container.get(ConfigService);
   const client_id = configService.get<string>("REDDIT_CLIENT_ID");
   const client_secret = configService.get<string>("REDDIT_CLIENT_SECRET");
   const redirect_uri = configService.get<string>("REDDIT_REDIRECT_URI");
-  const redirect_user_agent = configService.get<string>("REDDIT_USER_AGENT");
+  const user_agent = configService.get<string>("REDDIT_USER_AGENT");
 
   fastify.get("/community", async function (request, reply) {
     return "this is an example";
@@ -60,7 +60,7 @@ export default async function (
         " "
       )}`;
 
-      console.log(authUrl);
+      console.log(authUrl); // TODO: remove this later
 
       reply.redirect(authUrl);
     }
@@ -69,20 +69,19 @@ export default async function (
   fastify.get(
     "/auth/callback",
     async function (request: CallbackQuery, reply: FastifyReply) {
-      // state=RANDOM&code=M6-3xXC9tDL_GHjvpBRtfis6eVIahg#_
       request.log.info("Callback", request.query);
       const query = request.query;
 
       const axiosOptions: AxiosRequestConfig = {
         method: "POST",
         url: "https://www.reddit.com/api/v1/access_token",
-        data: {
+        params: {
           grant_type: "authorization_code",
           code: query.code,
           redirect_uri: redirect_uri,
         },
         headers: {
-          "User-Agent": redirect_user_agent,
+          "User-Agent": user_agent,
         },
         auth: {
           username: client_id,
@@ -92,12 +91,12 @@ export default async function (
 
       try {
         const response = await axios<{ access_token: string }>(axiosOptions);
-        console.log(response);
+        console.log(response.data); // TODO: remove this later
         fs.writeFile("reddit_token.txt", response.data.access_token, (err) => {
           if (err) {
             console.error("Couldn't save token");
           } else {
-            console.log("token saved");
+            console.log("token saved"); // TODO: remove this later
           }
         });
         reply.send("Logged in!");

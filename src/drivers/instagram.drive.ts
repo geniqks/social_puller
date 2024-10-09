@@ -6,6 +6,6 @@ import { BaseDriver } from "./base.driver";
 @injectable()
 export class InstagramDriver extends BaseDriver {
   public test() {
-    console.log("InstagramDriver");
+    console.log("InstagramDriver"); // TODO: remove this later
   }
 }
