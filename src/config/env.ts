@@ -2,6 +2,11 @@ import { bind } from "@decorators/bind.decorator";
 import { injectable } from "inversify";
 import { z } from "zod";
 
+export enum EnvEnum {
+  DEVELOPMENT = "development",
+  PRODUCTION = "production",
+}
+
 @bind()
 @injectable()
 export class Environment {

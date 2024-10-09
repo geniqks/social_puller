@@ -1,9 +1,10 @@
+import { EnvEnum } from "@config/env";
 import { bind } from "@decorators/bind.decorator";
+import { ConfigService } from "@services/config.service";
 import Fastify, { FastifyInstance } from "fastify";
 import { injectable } from "inversify";
 
-type ProcessEnvKeys = NonNullable<typeof process.env.ENV>;
-const envToLogger: Record<ProcessEnvKeys, any> = {
+const envToLogger: Record<EnvEnum, any> = {
   development: {
     transport: {
       target: "pino-pretty",
@@ -25,8 +26,9 @@ export class Server {
     return this._fastify;
   }
 
-  constructor() {
-    const env: ProcessEnvKeys = process.env.ENV ?? "development";
+  constructor(private readonly configService: ConfigService) {
+    const env: EnvEnum =
+      this.configService.get<EnvEnum>("ENV") ?? EnvEnum.DEVELOPMENT;
     this._fastify = Fastify({
       logger: envToLogger[env],
     });
