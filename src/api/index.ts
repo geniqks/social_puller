@@ -21,7 +21,7 @@ export class ApiHandler {
     await this.registerPlugins();
 
     const port = this.configService.get<number>("PORT");
-    this.server.fastify.listen({ port }, () =>
+    this.server.fastify.listen({ port, host: "0.0.0.0" }, () =>
       this.loggerService.pino.info("Server is running")
     );
   }

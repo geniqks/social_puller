@@ -16,9 +16,7 @@ export class BrightDataController {
     comments: 'gd_ltppn085pokosxh13',
     reels: 'gd_lyclm20il4r5helnj',
   }
-
   private readonly brightDataBaseApiUrl = 'https://api.brightdata.com/datasets/v3/trigger?dataset_id=';
-
   private brightDataToken: string;
 
   constructor(
@@ -29,7 +27,7 @@ export class BrightDataController {
   }
 
   /**
-   * Get instagram comments from any ty
+   * Get instagram comments from any instagram content
    */
   public async getInstagramComments(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
     // Il faudra ajouter dans la base de données ces résultats et autoriser un chargement des post 1 fois par jour maximum
@@ -53,6 +51,11 @@ export class BrightDataController {
       this.loggerService.pino.error(error);
       throw Error("Error while fetching instagram comments");
     }
+  }
+
+  private async monitorSnapshots(datasetId: string) {
+    const url = 'https://api.brightdata.com/datasets/v3/progress/s_m23rt2048uorzjsuj'
+
   }
 
   /**
