@@ -1,8 +1,11 @@
 {
-  "verbose": true,
+  "verbose": false,
   "watch": [
     "src",
     ".env.local"
+  ],
+  "ignore": [
+    "src/*.md"
   ],
   "ext": "hbs,ts,js",
   "exec": "npm run dev",
