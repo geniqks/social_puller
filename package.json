@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "dev": "nodemon --config nodemon.json",
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "watch": "nodemon --config nodemon.json",
     "build": "tsc -p ."
   },
   "dependencies": {
