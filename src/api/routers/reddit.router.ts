@@ -44,7 +44,7 @@ export default async function (
   );
   // #endregion
 
-  fastify.get("/community", async function (request, reply) {
-    return "this is an example";
+  fastify.get("/r/{subreddit}", async function (request: FastifyRequest<{ Params: { subreddit: string } }>, reply: FastifyReply) {
+    const { subreddit } = request.params;
   });
 }

@@ -5,7 +5,7 @@ import helmet from "@fastify/helmet";
 import { ConfigService } from "@services/config.service";
 import { injectable } from "inversify";
 import * as path from "path";
-import { Server } from "./server";
+import { Server } from "./server/server";
 
 @bind()
 @injectable()
@@ -13,7 +13,7 @@ export class ApiHandler {
   constructor(
     private readonly configService: ConfigService,
     private readonly server: Server
-  ) {}
+  ) { }
 
   public async init(): Promise<void> {
     await this.registerPlugins();
@@ -34,7 +34,7 @@ export class ApiHandler {
     });
 
     await this.server.fastify.register(autoload, {
-      dir: path.join(__dirname, "controllers"),
+      dir: path.join(__dirname, "routers"),
     });
   }
 }
