@@ -7,6 +7,7 @@
 
 # Twitter
 Twitter provides the capability to generate a bearer token directly from the developer portal, eliminating the need for a custom implementation for this driver.
+After obtaining the bearer token, add it to your environment file under the **TWITTER_BEARER_TOKEN** variable.
 
 # Instagram
 To be implemented // TODO
@@ -20,13 +21,15 @@ To set up OAuth2 and obtain the token for bot usage, you need to configure the f
   REDDIT_USERNAME,
   REDDIT_USER_AGENT**
 
-You can obtain **REDDIT_CLIENT_ID**, **REDDIT_CLIENT_SECRET**, and **REDDIT_REDIRECT_URI** by creating an application on the Reddit apps page: reddit.com/prefs/apps
+You can obtain **REDDIT_CLIENT_ID**, **REDDIT_CLIENT_SECRET**, and **REDDIT_REDIRECT_URI** by creating an application on the Reddit apps page: reddit.com/prefs/apps.
+
+In the Reddit portal, you need to set **REDDIT_REDIRECT_URI** to http://yourdomain.com/reddit/auth/callback
 
 **REDDIT_USERNAME** and **REDDIT_PASSWORD** correspond to your Reddit account credentials.
 
 **REDDIT_USER_AGENT** can be customized as desired, e.g., "myApp:v0.0.1"
 
-To acquire the token, you need to authorize your account to use your application by navigating to the following URL: http://localhost:3001/reddit/auth
+To acquire the token, you need to authorize your account to use your application by navigating to the following URL: http://yourdomain.com/reddit/auth
 
 Upon accessing this URL, a file named 'reddit_token.txt' will be generated. This file will contain the token value that should be assigned to the **REDDIT_USER_TOKEN** variable in your .env file. After setting the environment variable, it is recommended to delete the 'reddit_token.txt' file for security purposes.
 
