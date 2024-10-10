@@ -44,7 +44,8 @@ export default async function (
   );
   // #endregion
 
-  fastify.get("/r/{subreddit}", async function (request: FastifyRequest<{ Params: { subreddit: string } }>, reply: FastifyReply) {
+  fastify.get("/r/:subreddit", async function (request: FastifyRequest<{ Params: { subreddit: string } }>, reply: FastifyReply) {
     const { subreddit } = request.params;
+    return 'mathys'
   });
 }
