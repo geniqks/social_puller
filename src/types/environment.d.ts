@@ -8,6 +8,7 @@ declare global {
 }
 
 export interface IProcessEnv {
+  ENABLE_API: boolean;
   ENV: EnvEnum;
   INSTAGRAM_CLIENT_ID: string;
   INSTAGRAM_CLIENT_SECRET: string;

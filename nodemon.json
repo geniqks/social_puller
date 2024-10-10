@@ -1,7 +1,8 @@
 {
   "verbose": true,
   "watch": [
-    "src"
+    "src",
+    ".env.local"
   ],
   "ext": "hbs,ts,js",
   "exec": "npm run dev",
