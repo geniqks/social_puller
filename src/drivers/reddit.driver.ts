@@ -1,5 +1,6 @@
 import { bind } from "@decorators/bind.decorator";
 import { ConfigService } from "@services/config.service";
+import { LoggerService } from "@services/logger.service";
 import axios, { AxiosRequestConfig } from "axios";
 import * as fs from "fs";
 import { injectable } from "inversify";
@@ -12,7 +13,10 @@ export class RedditDriver extends BaseDriver {
   private redirect_uri: string;
   private user_agent: string;
 
-  constructor(readonly configService: ConfigService) {
+  constructor(
+    private readonly loggerService: LoggerService,
+    private readonly configService: ConfigService,
+  ) {
     super();
     this.client_id = configService.get<string>("REDDIT_CLIENT_ID");
     this.client_secret = configService.get<string>("REDDIT_CLIENT_SECRET");
@@ -91,14 +95,14 @@ export class RedditDriver extends BaseDriver {
       const response = await axios<{ access_token: string }>(axiosOptions);
       fs.writeFile("reddit_token.txt", response.data.access_token, (err) => {
         if (err) {
-          console.error("Couldn't save token");
+          this.loggerService.pino.error("Couldn't save token");
         } else {
-          console.log("token saved");
+          this.loggerService.pino.info("Token saved");
         }
       });
       return true;
     } catch (error) {
-      console.error("Error", error);
+      this.loggerService.pino.error("Error", error);
       return false;
     }
   }

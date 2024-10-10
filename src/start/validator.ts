@@ -3,6 +3,7 @@ import { IProcessEnv } from "@customTypes/environment";
 import { z } from "zod";
 
 export default (): Record<keyof IProcessEnv, z.ZodType<unknown>> => ({
+  BRIGHT_DATA_TOKEN: z.string(),
   ENABLE_API: z.string().transform(Boolean),
   ENV: z.nativeEnum(EnvEnum),
   INSTAGRAM_CLIENT_ID: z.string(),

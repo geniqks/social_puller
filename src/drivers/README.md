@@ -2,7 +2,8 @@
 | Driver      | Documentation                                                                    |
 |-------------|--------------------------------------------------------------------------------|
 | Twitter     | https://developer.x.com/en                                                      |
-| Instagram   | https://developers.facebook.com/docs/instagram-basic-display-api/               |
+| Instagram - BrightDataDriver   | https://docs.brightdata.com/scraping-automation/web-data-apis/web-scraper-api/overview            |
+| Instagram | |
 | Reddit      | https://www.reddit.com/dev/api/                                                 |
 
 # Twitter
@@ -10,16 +11,24 @@ Twitter provides the capability to generate a bearer token directly from the dev
 After obtaining the bearer token, add it to your environment file under the **TWITTER_BEARER_TOKEN** variable.
 
 # Instagram
-To be implemented // TODO
+
+
+# Instagram - BrightData
+> ! Instagram doesn't allow us to access other profile public data we need to scrap them
+
+BrightData provides the capability to generate a bearer token directly from the developer portal, eliminating the need for a custom implementation for this driver.
+After obtaining the bearer token, add it to your environment file under the **BRIGHT_DATA_TOKEN** variable.
 
 # Reddit
 To set up OAuth2 and obtain the token for bot usage, you need to configure the following environment variables:
-  **REDDIT_CLIENT_ID,
-  REDDIT_CLIENT_SECRET,
-  REDDIT_PASSWORD,
-  REDDIT_REDIRECT_URI,
-  REDDIT_USERNAME,
-  REDDIT_USER_AGENT**
+  | Variable |
+  |----------|
+  | REDDIT_CLIENT_ID |
+  | REDDIT_CLIENT_SECRET |
+  | REDDIT_PASSWORD |
+  | REDDIT_REDIRECT_URI |
+  | REDDIT_USERNAME |
+  | REDDIT_USER_AGENT |
 
 You can obtain **REDDIT_CLIENT_ID**, **REDDIT_CLIENT_SECRET**, and **REDDIT_REDIRECT_URI** by creating an application on the Reddit apps page: reddit.com/prefs/apps.
 
@@ -31,7 +40,7 @@ In the Reddit portal, you need to set **REDDIT_REDIRECT_URI** to http://yourdoma
 
 To acquire the token, you need to authorize your account to use your application by navigating to the following URL: http://yourdomain.com/reddit/auth
 
-Upon accessing this URL, a file named 'reddit_token.txt' will be generated. This file will contain the token value that should be assigned to the **REDDIT_USER_TOKEN** variable in your .env file. After setting the environment variable, it is recommended to delete the 'reddit_token.txt' file for security purposes.
+Upon accessing this URL, a file named **'reddit_token.txt'** will be generated. This file will contain the token value that should be assigned to the **REDDIT_USER_TOKEN** variable in your .env file. After setting the environment variable, it is recommended to delete the 'reddit_token.txt' file for security purposes.
 
 Once these steps are completed, you will be able to utilize all Reddit-related routes on behalf of the authorized account.
 

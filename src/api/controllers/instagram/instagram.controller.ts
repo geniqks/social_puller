@@ -1,12 +1,6 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { bind } from "@decorators/bind.decorator";
+import { injectable } from "inversify";
 
-export default async function (
-  fastify: FastifyInstance,
-  _opts: FastifyPluginOptions
-): Promise<void> {
-  fastify.get("/posts/:id", async function (request, reply) {
-    return {
-      message: "instagram posts",
-    };
-  });
-}
+@bind()
+@injectable()
+export class InstagramController { }

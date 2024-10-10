@@ -3,6 +3,7 @@ import autoload from "@fastify/autoload";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import { ConfigService } from "@services/config.service";
+import { LoggerService } from "@services/logger.service";
 import { injectable } from "inversify";
 import * as path from "path";
 import { Server } from "./server/server";
@@ -12,6 +13,7 @@ import { Server } from "./server/server";
 export class ApiHandler {
   constructor(
     private readonly configService: ConfigService,
+    private readonly loggerService: LoggerService,
     private readonly server: Server
   ) { }
 
@@ -20,7 +22,7 @@ export class ApiHandler {
 
     const port = this.configService.get<number>("PORT");
     this.server.fastify.listen({ port }, () =>
-      console.log("Server is running")
+      this.loggerService.pino.info("Server is running")
     );
   }
 
