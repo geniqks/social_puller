@@ -11,6 +11,7 @@ export interface IProcessEnv {
   BRIGHT_DATA_TOKEN: string;
   ENABLE_API: boolean;
   ENV: EnvEnum;
+  HOST: string;
   INSTAGRAM_CLIENT_ID: string;
   INSTAGRAM_CLIENT_SECRET: string;
   MONGO_URI: string;

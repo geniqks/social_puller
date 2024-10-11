@@ -40,5 +40,12 @@ export default async function (
       reply.status(500).send(error);
     }
   })
+
+  // TODO: ajouter un webhook pour chaque dataset
+  fastify.post("/comments/webhook", async (request: FastifyRequest, reply: FastifyReply) => {
+    const { body } = request;
+    console.log(body);
+    reply.send({ message: "ok" });
+  })
   // #endregion
 }

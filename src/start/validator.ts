@@ -6,6 +6,7 @@ export default (): Record<keyof IProcessEnv, z.ZodType<unknown>> => ({
   BRIGHT_DATA_TOKEN: z.string(),
   ENABLE_API: z.string().transform(Boolean),
   ENV: z.nativeEnum(EnvEnum),
+  HOST: z.string(),
   INSTAGRAM_CLIENT_ID: z.string(),
   INSTAGRAM_CLIENT_SECRET: z.string(),
   MONGO_URI: z.string(),
