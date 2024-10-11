@@ -11,3 +11,11 @@ export enum PostContentType {
   REEL = "reel",
 }
 // #endregion
+
+// #region BrightDataMonitor
+export enum BrightDataStatus {
+  COLLECTING = "collecting",
+  DIGESTING = "digesting",
+  READY = "ready",
+}
+// #endregion
