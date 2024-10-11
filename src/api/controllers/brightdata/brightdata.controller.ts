@@ -12,8 +12,9 @@ import { IInstagramBrightDataQueryParams, IInstagramBrightDataResponse } from ".
 @injectable()
 export class BrightDataController {
   private readonly brightDataDatasetIdsMapping = {
-    profiles: 'gd_l1vikfch901nx3by4',
     comments: 'gd_ltppn085pokosxh13',
+    posts: 'gd_lk5ns7kz21pck8jpis',
+    profiles: 'gd_l1vikfch901nx3by4',
     reels: 'gd_lyclm20il4r5helnj',
   }
   private readonly brightDataBaseApiUrl = 'https://api.brightdata.com/datasets/v3/trigger';
@@ -48,6 +49,12 @@ export class BrightDataController {
       endpoint: `${this.host}instagram/comments/webhook`,
     }
     const response = await this.triggerDataCollection(brightDataQueryParams, formattedUrls);
+    return response;
+  }
+
+  public async getInstagramPosts(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
+    const formattedUrls = this.formatUrls(urls);
+    const response = await this.triggerDataCollection(this.brightDataQueryParams, formattedUrls);
     return response;
   }
 
