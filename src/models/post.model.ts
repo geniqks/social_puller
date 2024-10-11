@@ -1,4 +1,5 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
+import { PostContentType, PostOrigin } from "./model.interface";
 
 
 class PostDto {
@@ -22,6 +23,11 @@ class PostDto {
   @prop({ default: 0 })
   public comment_count!: number;
 
+  // Number of reposts
+  // Only available for twitter
+  @prop({ default: 0 })
+  public repost_count?: number;
+
   // Number of likes
   @prop({ default: 0 })
   public likes!: number;
@@ -31,11 +37,11 @@ class PostDto {
   public pictures?: string[];
 
   // Content type
-  @prop()
-  public content_type?: 'reel' | 'photo' | 'video'; // TODO: créer une enum et voir tout les types possibles
+  @prop({ enum: PostContentType })
+  public content_type?: PostContentType; // TODO:voir tout les types possibles
 
   // Engagement score view given by BrightData
-  // Maybe used for the score of the post but should not be the primary criteria
+  // May be used for the score of the post but should not be the primary criteria
   @prop({ default: 0 })
   public engagement_score_view?: number;
 
@@ -43,9 +49,14 @@ class PostDto {
   @prop()
   public thumbnail?: string;
 
-  // Number of views of the video
+  // Number of bookmarks
+  // Only available for twitter
   @prop({ default: 0 })
-  public video_view_count?: number;
+  public bookmarks_count?: number;
+
+  // Number of views of the post
+  @prop({ default: 0 })
+  public view_count?: number;
 
   // Number of times the video has been played
   @prop({ default: 0 })
@@ -67,6 +78,10 @@ class PostDto {
     ig_artist_username: string;
     original_audio_title: string;
   };
+
+  // Origin of the post
+  @prop({ enum: PostOrigin })
+  public origin?: PostOrigin;
 
   // Date of the post
   @prop({ default: () => new Date() })
