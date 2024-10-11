@@ -160,7 +160,6 @@ export interface IInstagramBrightDataResponse {
   snapshot_id: string;
 }
 
-
 export interface IInstagramBrightDataQueryParams {
   // Endpoint that brightdata will call once the processing is completed
   endpoint: string;

@@ -1,6 +1,8 @@
 {
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
     "watch": "nodemon --config nodemon.json",
     "build": "tsc -p ."
   },
@@ -20,10 +22,16 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "gts": "^3.1.1",
     "nodemon": "^3.1.7",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
+    "prettier": "^2.8.8",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"

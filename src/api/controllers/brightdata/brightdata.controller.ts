@@ -3,7 +3,10 @@ import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { injectable } from "inversify";
-import { IInstagramBrightDataQueryParams, IInstagramBrightDataResponse } from "./brightdata.interface";
+import {
+  IInstagramBrightDataQueryParams,
+  IInstagramBrightDataResponse,
+} from "./brightdata.interface";
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper
@@ -12,21 +15,22 @@ import { IInstagramBrightDataQueryParams, IInstagramBrightDataResponse } from ".
 @injectable()
 export class BrightDataController {
   private readonly brightDataDatasetIdsMapping = {
-    instagram_comments: 'gd_ltppn085pokosxh13',
-    instagram_posts: 'gd_lk5ns7kz21pck8jpis',
-    instagram_profiles: 'gd_l1vikfch901nx3by4',
-    instagram_reels: 'gd_lyclm20il4r5helnj',
-  }
-  private readonly brightDataBaseApiUrl = 'https://api.brightdata.com/datasets/v3/trigger';
+    instagram_comments: "gd_ltppn085pokosxh13",
+    instagram_posts: "gd_lk5ns7kz21pck8jpis",
+    instagram_profiles: "gd_l1vikfch901nx3by4",
+    instagram_reels: "gd_lyclm20il4r5helnj",
+  };
+  private readonly brightDataBaseApiUrl =
+    "https://api.brightdata.com/datasets/v3/trigger";
   private brightDataToken: string;
   private host: string;
   private readonly brightDataQueryParams: IInstagramBrightDataQueryParams = {
-    dataset_id: '', // need to be set 
-    endpoint: '', // need to be set
+    dataset_id: "", // need to be set
+    endpoint: "", // need to be set
     include_errors: true,
     limit_multiple_results: 50,
-    format: 'json',
-  }
+    format: "json",
+  };
 
   constructor(
     private readonly loggerService: LoggerService,
@@ -40,21 +44,45 @@ export class BrightDataController {
   /**
    * Get instagram comments from any instagram content
    */
-  public async getInstagramComments(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
+  public async getInstagramComments(
+    urls: string[]
+  ): Promise<IInstagramBrightDataResponse | void> {
     // TODO: Il faudra ajouter dans la base de données ces résultats et autoriser un chargement des post 1 fois par jour maximum
-    return this.prepareAndTriggerBrightData('instagram_comments', 'instagram/comments/webhook', urls);
+    return this.prepareAndTriggerBrightData(
+      "instagram_comments",
+      "instagram/comments/webhook",
+      urls
+    );
   }
 
-  public async getInstagramPosts(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData('instagram_posts', 'instagram/posts/webhook', urls);
+  public async getInstagramPosts(
+    urls: string[]
+  ): Promise<IInstagramBrightDataResponse | void> {
+    return this.prepareAndTriggerBrightData(
+      "instagram_posts",
+      "instagram/posts/webhook",
+      urls
+    );
   }
 
-  public async getInstagramProfiles(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData('instagram_profiles', 'instagram/profiles/webhook', urls);
+  public async getInstagramProfiles(
+    urls: string[]
+  ): Promise<IInstagramBrightDataResponse | void> {
+    return this.prepareAndTriggerBrightData(
+      "instagram_profiles",
+      "instagram/profiles/webhook",
+      urls
+    );
   }
 
-  public async getInstagramReels(urls: string[]): Promise<IInstagramBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData('instagram_reels', 'instagram/reels/webhook', urls);
+  public async getInstagramReels(
+    urls: string[]
+  ): Promise<IInstagramBrightDataResponse | void> {
+    return this.prepareAndTriggerBrightData(
+      "instagram_reels",
+      "instagram/reels/webhook",
+      urls
+    );
   }
 
   /**
@@ -77,8 +105,11 @@ export class BrightDataController {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
       endpoint: `${this.host}${endpoint}`,
-    }
-    const response = await this.triggerDataCollection(brightDataQueryParams, formattedUrls);
+    };
+    const response = await this.triggerDataCollection(
+      brightDataQueryParams,
+      formattedUrls
+    );
     return response;
   }
 
@@ -94,15 +125,15 @@ export class BrightDataController {
   ): Promise<IInstagramBrightDataResponse> {
     try {
       const response = await axios<IInstagramBrightDataResponse>({
-        method: 'POST',
+        method: "POST",
         url: this.brightDataBaseApiUrl,
         params: queryParams,
         headers: {
-          'Authorization': `Bearer ${this.brightDataToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${this.brightDataToken}`,
+          "Content-Type": "application/json",
         },
-        data: formattedUrls
-      })
+        data: formattedUrls,
+      });
 
       return response.data;
     } catch (error) {

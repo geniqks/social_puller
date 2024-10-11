@@ -1,6 +1,5 @@
 import { getModelForClass } from "@typegoose/typegoose";
 
-
-class ProfileDto { }
+class ProfileDto {}
 
 export const ProfileModel = getModelForClass(ProfileDto);

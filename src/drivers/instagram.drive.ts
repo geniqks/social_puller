@@ -8,4 +8,4 @@ import { BaseDriver } from "./base.driver";
  */
 @bind()
 @injectable()
-export class InstagramDriver extends BaseDriver { }
+export class InstagramDriver extends BaseDriver {}

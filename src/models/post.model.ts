@@ -1,7 +1,6 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { PostContentType, PostOrigin } from "./model.interface";
 
-
 class PostDto {
   // URL of the post
   @prop()

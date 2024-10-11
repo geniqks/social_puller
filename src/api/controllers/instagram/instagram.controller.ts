@@ -3,4 +3,4 @@ import { injectable } from "inversify";
 
 @bind()
 @injectable()
-export class InstagramController { }
+export class InstagramController {}

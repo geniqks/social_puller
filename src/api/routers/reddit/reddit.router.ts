@@ -35,18 +35,24 @@ export default async function (
       const hasBeenAuthorized = await redditDriver.callbackHandler(code);
 
       if (hasBeenAuthorized) {
-        reply.code(StatusCodes.OK)
-        reply.send({ message: ReasonPhrases.OK })
+        reply.code(StatusCodes.OK);
+        reply.send({ message: ReasonPhrases.OK });
       } else {
-        reply.code(StatusCodes.UNAUTHORIZED)
-        reply.send({ message: ReasonPhrases.UNAUTHORIZED })
+        reply.code(StatusCodes.UNAUTHORIZED);
+        reply.send({ message: ReasonPhrases.UNAUTHORIZED });
       }
     }
   );
   // #endregion
 
-  fastify.get("/r/:subreddit", async function (request: FastifyRequest<{ Params: { subreddit: string } }>, reply: FastifyReply) {
-    const { subreddit } = request.params;
-    return 'mathys'
-  });
+  fastify.get(
+    "/r/:subreddit",
+    async function (
+      request: FastifyRequest<{ Params: { subreddit: string } }>,
+      reply: FastifyReply
+    ) {
+      const { subreddit } = request.params;
+      return "mathys";
+    }
+  );
 }

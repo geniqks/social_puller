@@ -15,7 +15,7 @@ export class RedditDriver extends BaseDriver {
 
   constructor(
     private readonly loggerService: LoggerService,
-    private readonly configService: ConfigService,
+    readonly configService: ConfigService
   ) {
     super();
     this.client_id = configService.get<string>("REDDIT_CLIENT_ID");
@@ -28,9 +28,9 @@ export class RedditDriver extends BaseDriver {
    * The process of autentication is inspired from this repository
    * https://github.com/adanzweig/nodejs-reddit/blob/master/index.js
    * https://www.youtube.com/watch?v=y3OoUsn3k8c&ab_channel=CodingwithAdo
-   * 
+   *
    * First step is to get the user authorization we can have it by going to the returned url to give the app the right to access the user data
-   * 
+   *
    * For more information about the authorization you can refer to the documentation below
    * https://github.com/reddit-archive/reddit/wiki/OAuth2#authorization
    */
@@ -59,9 +59,11 @@ export class RedditDriver extends BaseDriver {
       "wikiread",
     ];
 
-    const authUrl = `https://www.reddit.com/api/v1/authorize?client_id=${this.client_id}&response_type=code&state=RANDOM&redirect_uri=${this.redirect_uri}&duration=permanent&scope=${scopes.join(
-      " "
-    )}`;
+    const authUrl = `https://www.reddit.com/api/v1/authorize?client_id=${
+      this.client_id
+    }&response_type=code&state=RANDOM&redirect_uri=${
+      this.redirect_uri
+    }&duration=permanent&scope=${scopes.join(" ")}`;
 
     return authUrl;
   }
@@ -70,7 +72,7 @@ export class RedditDriver extends BaseDriver {
    * After the user is redirected to the callback URL, we obtain an access token from the Reddit API.
    * This token, which doesn't expire, is used for making subsequent API requests.
    * As we're operating in a bot context, we store the token in a file named 'reddit_token.txt' for persistent access across sessions.
-   * 
+   *
    * Note: The token will need to be saved in the .env file. Once this is done you need to delete 'reddit_token.txt'
    */
   async callbackHandler(code: string): Promise<boolean> {

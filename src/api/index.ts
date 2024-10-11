@@ -15,7 +15,7 @@ export class ApiHandler {
     private readonly configService: ConfigService,
     private readonly loggerService: LoggerService,
     private readonly server: Server
-  ) { }
+  ) {}
 
   public async init(): Promise<void> {
     await this.registerPlugins();

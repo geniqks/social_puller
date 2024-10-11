@@ -1,7 +1,4 @@
-import {
-  FastifyInstance,
-  FastifyPluginOptions
-} from "fastify";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 /**
  * Because of the twitter API price, we will use it only to post on the bot account.
@@ -9,4 +6,4 @@ import {
 export default async function (
   fastify: FastifyInstance,
   _opts: FastifyPluginOptions
-): Promise<void> { }
+): Promise<void> {}

@@ -4,7 +4,5 @@ import { injectable } from "inversify";
 @bind()
 @injectable()
 export class RedditController {
-
-  public async getSubredditPosts(subreddit: string): Promise<any> { }
-
+  public async getSubredditPosts(_subreddit: string): Promise<any> {}
 }
