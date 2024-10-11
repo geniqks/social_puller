@@ -96,6 +96,61 @@ export interface IInstagramReels {
   audio_url: string;
 }
 
+export interface IInstagramPosts {
+  url: string;
+  user_posted: string;
+  description: string;
+  hashtags: string[] | null;
+  num_comments: number;
+  date_posted: string;
+  likes: number;
+  photos: string[];
+  videos: string[];
+  location: string | null;
+  latest_comments: Array<{
+    comments: string;
+    likes: number;
+    user_commenting: string;
+  }>;
+  post_id: string;
+  discovery_input: string | null;
+  has_handshake: boolean | null;
+  display_url: string;
+  shortcode: string;
+  content_type: string;
+  pk: string;
+  content_id: string;
+  engagement_score_view: number;
+  thumbnail: string;
+  video_view_count: string;
+  product_type: string;
+  coauthor_producers: any[];
+  tagged_users: any[];
+  video_play_count: number;
+  followers: number;
+  posts_count: number;
+  profile_image_link: string;
+  is_verified: boolean;
+  is_paid_partnership: boolean;
+  partnership_details: {
+    profile_id: string | null;
+    profile_url: string | null;
+    username: string | null;
+  };
+  user_posted_id: string;
+  post_content: Array<{
+    index: number;
+    type: string;
+    url: string;
+  }>;
+  audio: {
+    audio_asset_id: string;
+    ig_artist_id: string;
+    ig_artist_username: string;
+    original_audio_title: string;
+  };
+  profile_url: string;
+}
 
 /**
  * The snapshot_id, is the id of the snapshot to monitor from bright data
