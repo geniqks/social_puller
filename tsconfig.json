@@ -19,7 +19,7 @@
       "@drivers*": ["src/drivers*"],
       "@interfaces*": ["src/interfaces*"],
       "@models*": ["src/models*"],
-      "@repository*": ["src/repository*"],
+      "@repositories*": ["src/repositories*"],
       "@services*": ["src/services*"],
       "@start*": ["src/start*"],
       "@utils*": ["src/utils*"],

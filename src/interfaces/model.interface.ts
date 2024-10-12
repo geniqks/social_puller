@@ -18,5 +18,6 @@ export enum BrightDataStatusEnum {
   DIGESTING = "digesting",
   RUNNING = "running",
   READY = "ready",
+  FAILED = "failed",
 }
 // #endregion

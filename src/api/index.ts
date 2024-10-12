@@ -6,6 +6,7 @@ import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import { injectable } from "inversify";
 import * as path from "path";
+import { loadSchemas } from "src/schemas/fastify.schema";
 import { Server } from "./server/server";
 
 @bind()
@@ -38,5 +39,7 @@ export class ApiHandler {
     await this.server.fastify.register(autoload, {
       dir: path.join(__dirname, "routers"),
     });
+
+    loadSchemas(this.server.fastify);
   }
 }

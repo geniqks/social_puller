@@ -3,6 +3,8 @@ import {
   IBrightDataQueryParams,
   IBrightDataResponse,
 } from "@interfaces/brightdata.interface";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
+import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
@@ -31,16 +33,16 @@ export class BrightDataController {
     format: "json",
     include_errors: true,
     limit_multiple_results: 50,
-    notify: "", // need to be set
   };
 
   constructor(
-    private readonly loggerService: LoggerService,
-    private readonly configService: ConfigService
+    private readonly brightDataMonitorRepository: BrightDataMonitorRepository,
+    private readonly configService: ConfigService,
+    private readonly loggerService: LoggerService
   ) {
     this.brightDataToken = this.configService.get<string>("BRIGHT_DATA_TOKEN");
     this.host = this.configService.get<string>("HOST");
-    this.notify_url = `${this.host}/brightdata/monitor`;
+    this.notify_url = `${this.host}brightdata/monitor`;
   }
 
   // TODO: il faudra mettre un système qui permet de monitor l'avancement du traitement et retourner le status du traitement si l'utilisateur query une deuxième fois la même url
@@ -108,12 +110,42 @@ export class BrightDataController {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
       endpoint: `${this.host}${endpoint}`,
+      notify: this.notify_url,
     };
+
     const response = await this.triggerDataCollection(
       brightDataQueryParams,
       formattedUrls
     );
+
+    await this.createBrightDataMonitor(
+      brightDataQueryParams.dataset_id,
+      response.snapshot_id,
+      brightDataQueryParams.endpoint,
+      urls
+    );
+
     return response;
+  }
+
+  private async createBrightDataMonitor(
+    dataset_id: string,
+    snapshot_id: string,
+    url: string,
+    requested_urls: string[]
+  ): Promise<void> {
+    await this.brightDataMonitorRepository.registerTransaction({
+      dataset_id,
+      snapshot_id,
+      url,
+      status: BrightDataStatusEnum.RUNNING,
+      requested_urls,
+    });
+  }
+
+  private async requestLimiter(dataset_id: string, requested_urls: string[]) {
+    // S'il y a une transaction en cours, pour les profiles transmi on ne peut pas en register une nouvelle
+    // S'il y a des transactions terminées dans les 24 dernières heures, on ne peut pas en register une nouvelle
   }
 
   /**

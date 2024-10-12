@@ -169,7 +169,7 @@ export interface IBrightDataQueryParams {
   format: string;
   include_errors: boolean;
   limit_multiple_results: number;
-  notify: string;
+  notify?: string;
 }
 // https://docs.brightdata.com/scraping-automation/web-data-apis/web-scraper-api/overview#monitor-progress
 export interface IBrightDataProgress {

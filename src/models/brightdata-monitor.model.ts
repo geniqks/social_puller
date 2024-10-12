@@ -15,8 +15,16 @@ class BrightDataMonitorDto {
   public snapshot_id!: string;
 
   @prop()
+  public dataset_id!: string;
+
+  @prop()
   public url!: string;
 
+  @prop()
+  public requested_urls?: string[];
+
+  @prop()
+  public error_message?: string;
   // https://docs.brightdata.com/scraping-automation/web-data-apis/web-scraper-api/overview#monitor-progress
   @prop()
   public status!: BrightDataStatusEnum;
@@ -28,7 +36,10 @@ class BrightDataMonitorDto {
 export const BrightDataMonitorModel = getModelForClass(BrightDataMonitorDto);
 
 export interface IBrightDataMonitorInput {
+  dataset_id?: string;
+  error_message?: string;
   snapshot_id: string;
-  url: string;
   status: BrightDataStatusEnum;
+  url: string;
+  requested_urls?: string[];
 }

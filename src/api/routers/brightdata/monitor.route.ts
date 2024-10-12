@@ -1,12 +1,13 @@
-import { BrightDataMonitorRepository } from "@repository/brightdata-monitor.repository";
+import { IBrightDataMonitorInput } from "@models/brightdata-monitor.model";
 import {
   FastifyInstance,
   FastifyPluginOptions,
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { IocContainer } from "src/containers/inversify.container";
+import { BrightDataMonitorRepository } from "src/repositories/brightdata-monitor.repository";
 
 /**
  * Because of the twitter API price, we will use it only to post on the bot account.
@@ -18,6 +19,7 @@ export default async function (
   const brightDataMonitorRepository = IocContainer.container.get(
     BrightDataMonitorRepository
   );
+
   fastify.get(
     "/monitor",
     async (
@@ -38,11 +40,23 @@ export default async function (
     }
   );
 
-  // TODO: ajouter un type pour la request
   fastify.post(
     "/monitor",
-    async (request: FastifyRequest, reply: FastifyReply) => {
-      console.log(request.body);
+    async (
+      request: FastifyRequest<{
+        Body: IBrightDataMonitorInput;
+      }>,
+      reply: FastifyReply
+    ) => {
+      const { snapshot_id, status, error_message } = request.body;
+
+      await brightDataMonitorRepository.updateTransactionStatus({
+        snapshot_id,
+        status,
+        error_message,
+      });
+
+      reply.status(StatusCodes.OK).send(ReasonPhrases.OK);
     }
   );
 }

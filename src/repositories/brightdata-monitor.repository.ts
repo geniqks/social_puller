@@ -1,8 +1,8 @@
 import { bind } from "@decorators/bind.decorator";
 import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import {
-  IBrightDataMonitorInput,
   BrightDataMonitorModel,
+  IBrightDataMonitorInput,
 } from "@models/brightdata-monitor.model";
 import { injectable } from "inversify";
 
@@ -15,16 +15,17 @@ export class BrightDataMonitorRepository {
   public async registerTransaction(
     brightDataMonitorInput: IBrightDataMonitorInput
   ): Promise<void> {
-    const hasPendingTransactions =
-      await this.hasTransactionsCompletedInLast24Hours(
-        brightDataMonitorInput.url
-      );
+    // TODO: cette vérification 'est pas la bonne il faut vérifier les requested_urls et non l'url
+    // const hasPendingTransactions =
+    //   await this.hasTransactionsCompletedInLast24Hours(
+    //     brightDataMonitorInput.url
+    //   );
 
-    if (hasPendingTransactions) {
-      throw new Error(
-        `Cannot register transaction, there are pending transactions for url: ${brightDataMonitorInput.url}`
-      );
-    }
+    // if (hasPendingTransactions) {
+    //   throw new Error(
+    //     `Cannot register transaction, there are pending transactions for url: ${brightDataMonitorInput.url}`
+    //   );
+    // }
 
     try {
       await BrightDataMonitorModel.create(brightDataMonitorInput);
@@ -47,16 +48,16 @@ export class BrightDataMonitorRepository {
    * Update the status of the transaction
    */
   public async updateTransactionStatus(
-    brightDataMonitorInput: IBrightDataMonitorInput
+    brightDataMonitorInput: Partial<IBrightDataMonitorInput>
   ): Promise<void> {
     await BrightDataMonitorModel.updateOne(
       {
         snapshot_id: brightDataMonitorInput.snapshot_id,
-        url: brightDataMonitorInput.url,
       },
       {
         $set: {
           status: brightDataMonitorInput.status,
+          error_message: brightDataMonitorInput?.error_message,
         },
       }
     );
@@ -95,6 +96,3 @@ export class BrightDataMonitorRepository {
     return !!pendingTransactions;
   }
 }
-// TODO: retirer les commentaires
-// S'il y a une transaction en cours, on ne peut pas en register une nouvelle
-// S'il y a des transactions terminées dans les 24 dernières heures, on ne peut pas en register une nouvelle

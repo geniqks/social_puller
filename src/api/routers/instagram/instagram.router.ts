@@ -21,18 +21,26 @@ export default async function (
   _opts: FastifyPluginOptions
 ): Promise<void> {
   const brightDataController = IocContainer.container.get(BrightDataController);
+  const querySchema = {
+    schema: {
+      querystring: {
+        $ref: "brightDataUrlsQuerySchema#",
+      },
+    },
+  };
 
   // #region BrightData
   fastify.get(
     "/comments",
+    querySchema,
     async (request: BridghtDataQueryType, reply: FastifyReply) => {
       const { urls } = request.query;
-      const urlsArray = urls.split(",");
-
-      // TODO: Voir pour ajouter la validation des urls fastify
       if (!urls) {
-        reply.status(400).send({ error: "No urls provided" });
+        reply.status(400).send({ message: "urls are required" });
+        return;
       }
+
+      const urlsArray = urls.split(",");
 
       try {
         const response = await brightDataController.getInstagramComments(
@@ -57,6 +65,7 @@ export default async function (
 
   fastify.get(
     "/posts",
+    querySchema,
     async (request: BridghtDataQueryType, reply: FastifyReply) => {
       const { urls } = request.query;
       const urlsArray = urls.split(",");
@@ -83,6 +92,7 @@ export default async function (
 
   fastify.get(
     "/profiles",
+    querySchema,
     async (request: BridghtDataQueryType, reply: FastifyReply) => {
       const { urls } = request.query;
       const urlsArray = urls.split(",");
@@ -109,6 +119,7 @@ export default async function (
 
   fastify.get(
     "/reels",
+    querySchema,
     async (request: BridghtDataQueryType, reply: FastifyReply) => {
       const { urls } = request.query;
       const urlsArray = urls.split(",");
