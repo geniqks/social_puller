@@ -1,12 +1,12 @@
 import { bind } from "@decorators/bind.decorator";
+import {
+  IBrightDataQueryParams,
+  IBrightDataResponse,
+} from "@interfaces/brightdata.interface";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { injectable } from "inversify";
-import {
-  IInstagramBrightDataQueryParams,
-  IInstagramBrightDataResponse,
-} from "./brightdata.interface";
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper
@@ -24,12 +24,14 @@ export class BrightDataController {
     "https://api.brightdata.com/datasets/v3/trigger";
   private brightDataToken: string;
   private host: string;
-  private readonly brightDataQueryParams: IInstagramBrightDataQueryParams = {
+  private notify_url: string;
+  private readonly brightDataQueryParams: IBrightDataQueryParams = {
     dataset_id: "", // need to be set
     endpoint: "", // need to be set
+    format: "json",
     include_errors: true,
     limit_multiple_results: 50,
-    format: "json",
+    notify: "", // need to be set
   };
 
   constructor(
@@ -38,6 +40,7 @@ export class BrightDataController {
   ) {
     this.brightDataToken = this.configService.get<string>("BRIGHT_DATA_TOKEN");
     this.host = this.configService.get<string>("HOST");
+    this.notify_url = `${this.host}/brightdata/monitor`;
   }
 
   // TODO: il faudra mettre un système qui permet de monitor l'avancement du traitement et retourner le status du traitement si l'utilisateur query une deuxième fois la même url
@@ -46,7 +49,7 @@ export class BrightDataController {
    */
   public async getInstagramComments(
     urls: string[]
-  ): Promise<IInstagramBrightDataResponse | void> {
+  ): Promise<IBrightDataResponse | void> {
     // TODO: Il faudra ajouter dans la base de données ces résultats et autoriser un chargement des post 1 fois par jour maximum
     return this.prepareAndTriggerBrightData(
       "instagram_comments",
@@ -57,7 +60,7 @@ export class BrightDataController {
 
   public async getInstagramPosts(
     urls: string[]
-  ): Promise<IInstagramBrightDataResponse | void> {
+  ): Promise<IBrightDataResponse | void> {
     return this.prepareAndTriggerBrightData(
       "instagram_posts",
       "instagram/posts/webhook",
@@ -67,7 +70,7 @@ export class BrightDataController {
 
   public async getInstagramProfiles(
     urls: string[]
-  ): Promise<IInstagramBrightDataResponse | void> {
+  ): Promise<IBrightDataResponse | void> {
     return this.prepareAndTriggerBrightData(
       "instagram_profiles",
       "instagram/profiles/webhook",
@@ -77,7 +80,7 @@ export class BrightDataController {
 
   public async getInstagramReels(
     urls: string[]
-  ): Promise<IInstagramBrightDataResponse | void> {
+  ): Promise<IBrightDataResponse | void> {
     return this.prepareAndTriggerBrightData(
       "instagram_reels",
       "instagram/reels/webhook",
@@ -99,9 +102,9 @@ export class BrightDataController {
     dataset: keyof typeof this.brightDataDatasetIdsMapping,
     endpoint: string,
     urls: string[]
-  ): Promise<IInstagramBrightDataResponse | void> {
+  ): Promise<IBrightDataResponse | void> {
     const formattedUrls = this.formatUrls(urls);
-    const brightDataQueryParams: IInstagramBrightDataQueryParams = {
+    const brightDataQueryParams: IBrightDataQueryParams = {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
       endpoint: `${this.host}${endpoint}`,
@@ -120,11 +123,11 @@ export class BrightDataController {
    * https://docs.brightdata.com/scraping-automation/web-data-apis/web-scraper-api/overview#via-webhook
    */
   private async triggerDataCollection(
-    queryParams: IInstagramBrightDataQueryParams,
+    queryParams: IBrightDataQueryParams,
     formattedUrls: { url: string }[]
-  ): Promise<IInstagramBrightDataResponse> {
+  ): Promise<IBrightDataResponse> {
     try {
-      const response = await axios<IInstagramBrightDataResponse>({
+      const response = await axios<IBrightDataResponse>({
         method: "POST",
         url: this.brightDataBaseApiUrl,
         params: queryParams,

@@ -14,12 +14,15 @@
       "@cli*": ["src/cli*"],
       "@config*": ["src/config*"],
       "@constants*": ["src/constants*"],
+      "@customTypes*": ["src/types*"],
       "@decorators*": ["src/decorators*"],
       "@drivers*": ["src/drivers*"],
+      "@interfaces*": ["src/interfaces*"],
+      "@models*": ["src/models*"],
+      "@repository*": ["src/repository*"],
       "@services*": ["src/services*"],
-      "@utils*": ["src/utils*"],
       "@start*": ["src/start*"],
-      "@customTypes*": ["src/types*"]
+      "@utils*": ["src/utils*"],
     }
   },
   "include": ["src/**/*.ts"]

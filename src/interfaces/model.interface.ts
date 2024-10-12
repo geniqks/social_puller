@@ -1,11 +1,11 @@
 // #region Post
-export enum PostOrigin {
+export enum PostOriginEnum {
   TWITTER = "twitter",
   INSTAGRAM = "instagram",
   REDDIT = "reddit",
 }
 
-export enum PostContentType {
+export enum PostContentTypeEnum {
   PHOTO = "photo",
   VIDEO = "video",
   REEL = "reel",
@@ -13,9 +13,10 @@ export enum PostContentType {
 // #endregion
 
 // #region BrightDataMonitor
-export enum BrightDataStatus {
+export enum BrightDataStatusEnum {
   COLLECTING = "collecting",
   DIGESTING = "digesting",
+  RUNNING = "running",
   READY = "ready",
 }
 // #endregion

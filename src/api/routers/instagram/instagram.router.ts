@@ -23,7 +23,6 @@ export default async function (
   const brightDataController = IocContainer.container.get(BrightDataController);
 
   // #region BrightData
-  // TODO: ajouter un callback_url qui sera trigger une fois le traitement terminé
   fastify.get(
     "/comments",
     async (request: BridghtDataQueryType, reply: FastifyReply) => {

@@ -1,5 +1,8 @@
+import {
+  PostContentTypeEnum,
+  PostOriginEnum,
+} from "@interfaces/model.interface";
 import { getModelForClass, prop } from "@typegoose/typegoose";
-import { PostContentType, PostOrigin } from "./model.interface";
 
 class PostDto {
   // URL of the post
@@ -36,8 +39,8 @@ class PostDto {
   public pictures?: string[];
 
   // Content type
-  @prop({ enum: PostContentType })
-  public content_type?: PostContentType; // TODO:voir tout les types possibles
+  @prop({ enum: PostContentTypeEnum })
+  public content_type?: PostContentTypeEnum; // TODO:voir tout les types possibles
 
   // Engagement score view given by BrightData
   // May be used for the score of the post but should not be the primary criteria
@@ -79,8 +82,8 @@ class PostDto {
   };
 
   // Origin of the post
-  @prop({ enum: PostOrigin })
-  public origin?: PostOrigin;
+  @prop({ enum: PostOriginEnum })
+  public origin?: PostOriginEnum;
 
   // Date of the post
   @prop({ default: () => new Date() })
