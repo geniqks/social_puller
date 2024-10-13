@@ -7,8 +7,8 @@ import { LoggerService } from "@services/logger.service";
 import { StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
 import * as path from "path";
-import { loadSchemas } from "src/schemas/fastify.schema";
 import { HttpException } from "./errors/http-exception.error";
+import { loadSchemas } from "./schemas/fastify.schema";
 import { Server } from "./server/server";
 
 @bind()

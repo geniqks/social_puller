@@ -10,23 +10,12 @@ import { injectable } from "inversify";
 @injectable()
 export class BrightDataMonitorRepository {
   /**
+   * ! Never call this function without the requestLimiter() from brightdata.controller.ts
    * Register a new transaction
    */
   public async registerTransaction(
     brightDataMonitorInput: IBrightDataMonitorInput
   ): Promise<void> {
-    // TODO: cette vérification 'est pas la bonne il faut vérifier les requested_urls et non l'url
-    // const hasPendingTransactions =
-    //   await this.hasTransactionsCompletedInLast24Hours(
-    //     brightDataMonitorInput.url
-    //   );
-
-    // if (hasPendingTransactions) {
-    //   throw new Error(
-    //     `Cannot register transaction, there are pending transactions for url: ${brightDataMonitorInput.url}`
-    //   );
-    // }
-
     try {
       await BrightDataMonitorModel.create(brightDataMonitorInput);
     } catch (error) {

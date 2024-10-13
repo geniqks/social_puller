@@ -21,6 +21,7 @@
       "@interfaces*": ["src/interfaces*"],
       "@models*": ["src/models*"],
       "@repositories*": ["src/repositories*"],
+      "@schemas*": ["src/api/schemas*"],
       "@services*": ["src/services*"],
       "@start*": ["src/start*"],
       "@utils*": ["src/utils*"],
