@@ -17,6 +17,7 @@
       "@customTypes*": ["src/types*"],
       "@decorators*": ["src/decorators*"],
       "@drivers*": ["src/drivers*"],
+      "@errors*": ["src/api/errors*"],
       "@interfaces*": ["src/interfaces*"],
       "@models*": ["src/models*"],
       "@repositories*": ["src/repositories*"],

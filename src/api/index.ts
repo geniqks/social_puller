@@ -4,9 +4,11 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
+import { StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
 import * as path from "path";
 import { loadSchemas } from "src/schemas/fastify.schema";
+import { HttpException } from "./errors/http-exception.error";
 import { Server } from "./server/server";
 
 @bind()
@@ -32,6 +34,8 @@ export class ApiHandler {
       global: true,
     });
 
+    await this.handleErrors();
+
     await this.server.fastify.register(cors, {
       origin: "*",
     });
@@ -41,5 +45,15 @@ export class ApiHandler {
     });
 
     loadSchemas(this.server.fastify);
+  }
+
+  private async handleErrors(): Promise<void> {
+    this.server.fastify.setErrorHandler((error, _request, reply) => {
+      if (error instanceof HttpException) {
+        reply.status(error.statusCode).send(error.formatError());
+      }
+
+      reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ ok: false });
+    });
   }
 }
