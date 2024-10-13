@@ -93,10 +93,11 @@ export class BrightDataController {
   }
 
   /**
-   * Format the urls to be used in the bright data api
+   * Formats and deduplicates URLs for the Bright Data API
    */
   private formatUrls(urls: string[]): { url: string }[] {
-    return urls.map((url) => ({ url }));
+    const uniqueUrls = [...new Set(urls)];
+    return uniqueUrls.map((url) => ({ url }));
   }
 
   /**
