@@ -42,4 +42,7 @@ export interface IBrightDataMonitorInput {
   status: BrightDataStatusEnum;
   url: string;
   requested_urls?: string[];
+  error_codes?: {
+    dead_page?: boolean;
+  };
 }

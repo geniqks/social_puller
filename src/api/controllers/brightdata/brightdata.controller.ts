@@ -9,7 +9,7 @@ import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.re
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
 
 /**
@@ -39,22 +39,20 @@ export class BrightDataController {
 
   constructor(
     private readonly brightDataMonitorRepository: BrightDataMonitorRepository,
-    private readonly configService: ConfigService,
-    private readonly loggerService: LoggerService
+    private readonly loggerService: LoggerService,
+    readonly configService: ConfigService
   ) {
-    this.brightDataToken = this.configService.get<string>("BRIGHT_DATA_TOKEN");
-    this.host = this.configService.get<string>("HOST");
+    this.brightDataToken = configService.get<string>("BRIGHT_DATA_TOKEN");
+    this.host = configService.get<string>("HOST");
     this.notify_url = `${this.host}brightdata/monitor`;
   }
 
-  // TODO: il faudra mettre un système qui permet de monitor l'avancement du traitement et retourner le status du traitement si l'utilisateur query une deuxième fois la même url
   /**
    * Get instagram comments from any instagram content
    */
   public async getInstagramComments(
     urls: string[]
   ): Promise<IBrightDataResponse | void> {
-    // TODO: Il faudra ajouter dans la base de données ces résultats et autoriser un chargement des post 1 fois par jour maximum
     return this.prepareAndTriggerBrightData(
       "instagram_comments",
       "instagram/comments/webhook",
@@ -93,6 +91,14 @@ export class BrightDataController {
   }
 
   /**
+   * Processes the webhook response from Bright Data
+   * If there is an input error, it will remove the url from the last resource in ready
+   */
+  public async processBrightDataWebhookResponse() {
+    // TODO: to be implemented
+  }
+
+  /**
    * Formats and deduplicates URLs for the Bright Data API
    */
   private formatUrls(urls: string[]): { url: string }[] {
@@ -108,7 +114,14 @@ export class BrightDataController {
     endpoint: string,
     urls: string[]
   ): Promise<IBrightDataResponse | void> {
-    const formattedUrls = this.formatUrls(urls);
+    const filteredUrls = urls.filter((url) => url);
+    if (!filteredUrls.length) {
+      throw new HttpException({
+        message: ReasonPhrases.BAD_REQUEST,
+        statusCode: StatusCodes.BAD_REQUEST,
+      });
+    }
+    const formattedUrls = this.formatUrls(filteredUrls);
     const brightDataQueryParams: IBrightDataQueryParams = {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
@@ -123,36 +136,22 @@ export class BrightDataController {
       formattedUrls
     );
 
-    await this.createBrightDataMonitor(
-      brightDataQueryParams.dataset_id,
-      response.snapshot_id,
-      brightDataQueryParams.endpoint,
-      urls
-    );
+    await this.brightDataMonitorRepository.registerTransaction({
+      dataset_id: brightDataQueryParams.dataset_id,
+      snapshot_id: response.snapshot_id,
+      url: brightDataQueryParams.endpoint,
+      status: BrightDataStatusEnum.RUNNING,
+      requested_urls: urls,
+    });
 
     return response;
-  }
-
-  private async createBrightDataMonitor(
-    dataset_id: string,
-    snapshot_id: string,
-    url: string,
-    requested_urls: string[]
-  ): Promise<void> {
-    await this.brightDataMonitorRepository.registerTransaction({
-      dataset_id,
-      snapshot_id,
-      url,
-      status: BrightDataStatusEnum.RUNNING,
-      requested_urls,
-    });
   }
 
   /**
    * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
    */
   private async requestLimiter(dataset_id: string, requested_urls: string[]) {
-    const isTransactionInProgress =
+    const hasTransactionInProgress =
       await this.brightDataMonitorRepository.hasPendingTransactions(
         dataset_id,
         requested_urls
@@ -163,9 +162,10 @@ export class BrightDataController {
         requested_urls
       );
 
-    if (isTransactionInProgress.hasPending) {
+    if (hasTransactionInProgress.hasPending) {
       throw new HttpException({
-        message: `A transaction is already in progress for the url: ${isTransactionInProgress.problematicUrl}`,
+        message: `A transaction is already in progress for the urls`,
+        urls: hasTransactionInProgress.problematicUrl,
         statusCode: StatusCodes.CONFLICT,
       });
     }

@@ -59,7 +59,7 @@ export class BrightDataMonitorRepository {
   public async hasPendingTransactions(
     dataset_id: string,
     requested_urls: string[]
-  ): Promise<{ hasPending: boolean; problematicUrl?: string }> {
+  ): Promise<{ hasPending: boolean; problematicUrl?: string[] }> {
     const pendingTransaction = await BrightDataMonitorModel.findOne({
       dataset_id,
       requested_urls: { $in: requested_urls },
@@ -70,7 +70,7 @@ export class BrightDataMonitorRepository {
       return { hasPending: false };
     }
 
-    const problematicUrl = requested_urls.find((url) =>
+    const problematicUrl = requested_urls.filter((url) =>
       pendingTransaction.requested_urls?.includes(url)
     );
 
