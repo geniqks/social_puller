@@ -94,14 +94,27 @@ export class BrightDataMonitorRepository {
    */
   public async hasTransactionsCompletedInLast24Hours(
     requested_urls: string[]
-  ): Promise<boolean> {
+  ): Promise<{
+    hasCompletedTransactions: boolean;
+    urls?: string[];
+  }> {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const pendingTransactions = await BrightDataMonitorModel.findOne({
-      requested_urls,
-      createdAt: { $gte: twentyFourHoursAgo },
+    const processedTransactions = await BrightDataMonitorModel.find({
+      requested_urls: { $in: requested_urls },
+      created_at: { $gte: twentyFourHoursAgo },
       status: BrightDataStatusEnum.READY,
-    });
+    }).lean();
 
-    return !!pendingTransactions;
+    const problematicUrls = processedTransactions.flatMap(
+      (transaction) =>
+        transaction.requested_urls?.filter((url) =>
+          requested_urls.includes(url)
+        ) || []
+    );
+
+    return {
+      hasCompletedTransactions: problematicUrls.length > 0,
+      urls: problematicUrls,
+    };
   }
 }

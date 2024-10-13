@@ -147,19 +147,20 @@ export class BrightDataController {
     });
   }
 
+  /**
+   * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
+   */
   private async requestLimiter(dataset_id: string, requested_urls: string[]) {
-    // S'il y a une transaction en cours, pour les profiles transmi on ne peut pas en register une nouvelle
-    // S'il y a des transactions terminées dans les 24 dernières heures, on ne peut pas en register une nouvelle
     const isTransactionInProgress =
       await this.brightDataMonitorRepository.hasPendingTransactions(
         dataset_id,
         requested_urls
       );
 
-    // const hasTransactionsCompletedInLast24Hours =
-    //   await this.brightDataMonitorRepository.hasTransactionsCompletedInLast24Hours(
-    //     requested_urls
-    //   );
+    const hasTransactionsCompletedInLast24Hours =
+      await this.brightDataMonitorRepository.hasTransactionsCompletedInLast24Hours(
+        requested_urls
+      );
 
     if (isTransactionInProgress.hasPending) {
       throw new HttpException({
@@ -168,9 +169,13 @@ export class BrightDataController {
       });
     }
 
-    // if (hasTransactionsCompletedInLast24Hours) {
-    //   throw new Error("An url can be requester once every 24 hours");
-    // }
+    if (hasTransactionsCompletedInLast24Hours.hasCompletedTransactions) {
+      throw new HttpException({
+        message: `Among the submitted URLs, there is one or more that has already been processed within the last 24 hours.`,
+        urls: hasTransactionsCompletedInLast24Hours.urls,
+        statusCode: StatusCodes.TOO_MANY_REQUESTS,
+      });
+    }
   }
 
   /**
