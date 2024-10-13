@@ -1,3 +1,4 @@
+import { HttpException } from "@api/errors/http-exception.error";
 import { bind } from "@decorators/bind.decorator";
 import {
   IBrightDataQueryParams,
@@ -8,6 +9,7 @@ import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.re
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
+import { StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
 
 /**
@@ -113,6 +115,8 @@ export class BrightDataController {
       notify: this.notify_url,
     };
 
+    await this.requestLimiter(brightDataQueryParams.dataset_id, urls);
+
     const response = await this.triggerDataCollection(
       brightDataQueryParams,
       formattedUrls
@@ -146,6 +150,27 @@ export class BrightDataController {
   private async requestLimiter(dataset_id: string, requested_urls: string[]) {
     // S'il y a une transaction en cours, pour les profiles transmi on ne peut pas en register une nouvelle
     // S'il y a des transactions terminées dans les 24 dernières heures, on ne peut pas en register une nouvelle
+    const isTransactionInProgress =
+      await this.brightDataMonitorRepository.hasPendingTransactions(
+        dataset_id,
+        requested_urls
+      );
+
+    // const hasTransactionsCompletedInLast24Hours =
+    //   await this.brightDataMonitorRepository.hasTransactionsCompletedInLast24Hours(
+    //     requested_urls
+    //   );
+
+    if (isTransactionInProgress.hasPending) {
+      throw new HttpException({
+        message: `A transaction is already in progress for the url: ${isTransactionInProgress.problematicUrl}`,
+        statusCode: StatusCodes.CONFLICT,
+      });
+    }
+
+    // if (hasTransactionsCompletedInLast24Hours) {
+    //   throw new Error("An url can be requester once every 24 hours");
+    // }
   }
 
   /**

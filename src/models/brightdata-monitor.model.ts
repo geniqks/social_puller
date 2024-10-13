@@ -20,7 +20,7 @@ class BrightDataMonitorDto {
   @prop()
   public url!: string;
 
-  @prop()
+  @prop({ type: () => [String] })
   public requested_urls?: string[];
 
   @prop()

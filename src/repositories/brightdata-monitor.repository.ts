@@ -67,16 +67,25 @@ export class BrightDataMonitorRepository {
    * Check if there are pending transactions for the given url
    * Will be used to check if we can register a new transaction for the given url
    */
-  public async hasPendingTransactions(url: string): Promise<boolean> {
-    const pendingTransactions = await BrightDataMonitorModel.findOne({
-      url,
+  public async hasPendingTransactions(
+    dataset_id: string,
+    requested_urls: string[]
+  ): Promise<{ hasPending: boolean; problematicUrl?: string }> {
+    const pendingTransaction = await BrightDataMonitorModel.findOne({
+      dataset_id,
+      requested_urls: { $in: requested_urls },
+      status: { $eq: BrightDataStatusEnum.RUNNING },
     }).lean();
 
-    if (!pendingTransactions) {
-      return false;
+    if (!pendingTransaction) {
+      return { hasPending: false };
     }
 
-    return pendingTransactions.status !== BrightDataStatusEnum.READY;
+    const problematicUrl = requested_urls.find((url) =>
+      pendingTransaction.requested_urls?.includes(url)
+    );
+
+    return { hasPending: true, problematicUrl };
   }
 
   /**
@@ -84,11 +93,11 @@ export class BrightDataMonitorRepository {
    * Will be used to check if we can register a new transaction for the given url
    */
   public async hasTransactionsCompletedInLast24Hours(
-    url: string
+    requested_urls: string[]
   ): Promise<boolean> {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const pendingTransactions = await BrightDataMonitorModel.findOne({
-      url,
+      requested_urls,
       createdAt: { $gte: twentyFourHoursAgo },
       status: BrightDataStatusEnum.READY,
     });
