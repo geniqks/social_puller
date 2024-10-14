@@ -7,7 +7,7 @@
   "ignore": [
     "src/*.md"
   ],
-  "ext": "hbs,ts,js",
+  "ext": "ts,js",
   "exec": "npm run dev",
   "execMap": {
     "ts": "npm run dev"
