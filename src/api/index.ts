@@ -48,11 +48,12 @@ export class ApiHandler {
   }
 
   private async handleErrors(): Promise<void> {
-    this.server.fastify.setErrorHandler((error, _request, reply) => {
+    this.server.fastify.setErrorHandler((error, request, reply) => {
       if (error instanceof HttpException) {
         reply.status(error.statusCode).send(error.formatError());
       }
 
+      request.log.error(error);
       reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ ok: false });
     });
   }
