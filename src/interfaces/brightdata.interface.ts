@@ -1,6 +1,14 @@
 import { BrightDataStatusEnum } from "./model.interface";
 
-export interface IInstagramComments {
+interface IBrightDataWebhookResponse {
+  input?: {
+    url: string;
+  };
+  warning?: string;
+  warning_code?: string;
+}
+
+export interface IInstagramComments extends IBrightDataWebhookResponse {
   url: string;
   comment_user: string;
   comment_user_url: string;
@@ -22,7 +30,7 @@ export interface IInstagramComments {
   post_id: string;
 }
 
-export interface IInstagramProfile {
+export interface IInstagramProfile extends IBrightDataWebhookResponse {
   account: string;
   fbid: string;
   id: string;
@@ -68,7 +76,7 @@ export interface IInstagramProfile {
   partner_id: string | null;
 }
 
-export interface IInstagramReels {
+export interface IInstagramReels extends IBrightDataWebhookResponse {
   url: string;
   user_posted: string;
   description: string;
@@ -98,7 +106,7 @@ export interface IInstagramReels {
   audio_url: string;
 }
 
-export interface IInstagramPosts {
+export interface IInstagramPosts extends IBrightDataWebhookResponse {
   url: string;
   user_posted: string;
   description: string;
@@ -163,12 +171,12 @@ export interface IBrightDataResponse {
 }
 
 export interface IBrightDataQueryParams {
-  // Endpoint that brightdata will call once the processing is completed
   dataset_id: string;
   endpoint: string;
   format: string;
   include_errors: boolean;
   limit_multiple_results: number;
+  // Endpoint that brightdata will call once the processing is completed
   notify?: string;
 }
 // https://docs.brightdata.com/scraping-automation/web-data-apis/web-scraper-api/overview#monitor-progress

@@ -3,6 +3,10 @@ import { bind } from "@decorators/bind.decorator";
 import {
   IBrightDataQueryParams,
   IBrightDataResponse,
+  IInstagramComments,
+  IInstagramPosts,
+  IInstagramProfile,
+  IInstagramReels,
 } from "@interfaces/brightdata.interface";
 import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
@@ -11,6 +15,12 @@ import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
+
+type BrightDataResponse =
+  | IInstagramPosts
+  | IInstagramComments
+  | IInstagramProfile
+  | IInstagramReels;
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper
@@ -21,7 +31,7 @@ export class BrightDataController {
   private readonly brightDataDatasetIdsMapping = {
     instagram_comments: "gd_ltppn085pokosxh13",
     instagram_posts: "gd_lk5ns7kz21pck8jpis",
-    instagram_profiles: "gd_l1vikfch901nx3by4",
+    instagram_profile: "gd_l1vikfch901nx3by4",
     instagram_reels: "gd_lyclm20il4r5helnj",
   };
   private readonly brightDataBaseApiUrl =
@@ -70,11 +80,11 @@ export class BrightDataController {
     );
   }
 
-  public async getInstagramProfiles(
+  public async getInstagramProfile(
     urls: string[]
   ): Promise<IBrightDataResponse | void> {
     return this.prepareAndTriggerBrightData(
-      "instagram_profiles",
+      "instagram_profile",
       "instagram/profiles/webhook",
       urls
     );
@@ -92,10 +102,28 @@ export class BrightDataController {
 
   /**
    * Processes the webhook response from Bright Data
-   * If there is an input error, it will remove the url from the last resource in ready
+   * Removes URLs with warnings from the monitor and filters out responses with warnings
    */
-  public async processBrightDataWebhookResponse() {
-    // TODO: to be implemented
+  public async filterAndCleanBrightDataResponses(
+    brightDataResponses: BrightDataResponse[]
+  ) {
+    const brightDataResponsesWithWarning = brightDataResponses.filter(
+      (item) => item?.warning
+    );
+
+    for (const brightDataResponseWithWarning of brightDataResponsesWithWarning) {
+      if (brightDataResponseWithWarning.input) {
+        await this.brightDataMonitorRepository.removeUrlFromBrightDataMonitor(
+          brightDataResponseWithWarning.input.url
+        );
+      }
+    }
+
+    if (brightDataResponsesWithWarning.length) {
+      return brightDataResponses.filter((response) => !response.warning);
+    }
+
+    return brightDataResponses;
   }
 
   /**

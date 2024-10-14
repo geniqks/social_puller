@@ -37,19 +37,54 @@ export class BrightDataMonitorRepository {
    * Update the status of the transaction
    */
   public async updateTransactionStatus(
-    brightDataMonitorInput: Partial<IBrightDataMonitorInput>
+    brightDataMonitorInput: IBrightDataMonitorInput
   ): Promise<void> {
+    const updateFields: {
+      status: BrightDataStatusEnum;
+      error_message?: string;
+    } = {
+      status: brightDataMonitorInput.status,
+    };
+
+    if (brightDataMonitorInput.error_message) {
+      updateFields.error_message = brightDataMonitorInput.error_message;
+    }
+
     await BrightDataMonitorModel.updateOne(
       {
         snapshot_id: brightDataMonitorInput.snapshot_id,
       },
       {
-        $set: {
-          status: brightDataMonitorInput.status,
-          error_message: brightDataMonitorInput?.error_message,
-        },
+        $set: updateFields,
       }
     );
+  }
+
+  /**
+   * Remove a url from the brightdata monitor
+   */
+  public async removeUrlFromBrightDataMonitor(url: string): Promise<void> {
+    const transaction = await BrightDataMonitorModel.findOne({
+      requested_urls: url,
+    });
+
+    if (!transaction) {
+      return;
+    }
+
+    // If the transaction has only one url and this url is the one we want to remove, we delete the transaction
+    // Else we remove the url from the transaction
+    if (
+      transaction.requested_urls?.length === 1 &&
+      transaction.requested_urls?.[0] === url
+    ) {
+      await BrightDataMonitorModel.deleteOne({ _id: transaction._id });
+    } else {
+      await BrightDataMonitorModel.updateOne(
+        { _id: transaction._id },
+        { $pull: { requested_urls: url } }
+      );
+    }
   }
 
   /**
