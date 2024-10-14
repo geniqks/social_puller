@@ -22,7 +22,7 @@ export interface IProcessEnv {
   REDDIT_REDIRECT_URI: string;
   REDDIT_USERNAME: string;
   REDDIT_USER_AGENT: string;
-  REDDIT_USER_TOKEN: string;
+  REDDIT_USER_TOKEN?: string;
   TWITTER_BEARER_TOKEN: string;
 }
 
