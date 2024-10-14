@@ -1,7 +1,7 @@
 import { bind } from "@decorators/bind.decorator";
-import { IBrightDataProgress } from "@interfaces/brightdata.interface";
 import axios from "axios";
 import { injectable } from "inversify";
+import { IBrightDataProgress } from "src/interfaces/brightdata.interface";
 
 @bind()
 @injectable()

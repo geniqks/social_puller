@@ -40,7 +40,6 @@ export default async function (
     }
   );
 
-  // TODO: handle return for url that does not exist
   fastify.post(
     "/monitor",
     async (

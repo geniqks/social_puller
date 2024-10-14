@@ -1,10 +1,10 @@
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import {
   PostContentTypeEnum,
   PostOriginEnum,
-} from "@interfaces/model.interface";
-import { getModelForClass, prop } from "@typegoose/typegoose";
+} from "src/interfaces/model.interface";
 
-class PostDto {
+export class PostDto {
   // URL of the post
   @prop()
   public url!: string;
@@ -14,8 +14,8 @@ class PostDto {
   public post_id!: string;
 
   // Location if the user added it
-  @prop()
-  public location?: string;
+  @prop({ type: () => [String] })
+  public location?: string[];
 
   // Description of the post
   @prop()
@@ -35,7 +35,7 @@ class PostDto {
   public likes!: number;
 
   // Pictures of the post
-  @prop()
+  @prop({ type: () => [String] })
   public pictures?: string[];
 
   // Content type
@@ -59,6 +59,10 @@ class PostDto {
   // Number of views of the post
   @prop({ default: 0 })
   public view_count?: number;
+
+  // Links from the linked video posts
+  @prop({ type: () => [String] })
+  public videos?: string[];
 
   // Number of times the video has been played
   @prop({ default: 0 })
