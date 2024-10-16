@@ -1,4 +1,3 @@
-import { BrightDataController } from "@api/controllers/brightdata/brightdata.controller";
 import { InstagramController } from "@api/controllers/instagram/instagram.controller";
 import {
   FastifyInstance,
@@ -22,7 +21,6 @@ export default async function (
   fastify: FastifyInstance,
   _opts: FastifyPluginOptions
 ): Promise<void> {
-  const brightDataController = IocContainer.container.get(BrightDataController);
   const instagramController = IocContainer.container.get(InstagramController);
 
   const querySchema = {
@@ -47,7 +45,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await brightDataController.getInstagramComments(
+        const response = await instagramController.getInstagramComments(
           urlsArray
         );
         reply.send(response);
@@ -74,7 +72,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await brightDataController.getInstagramPosts(
+        const response = await instagramController.getInstagramPosts(
           urlsArray
         );
         reply.send(response);
@@ -253,7 +251,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await brightDataController.getInstagramProfile(
+        const response = await instagramController.getInstagramProfile(
           urlsArray
         );
         reply.send(response);
@@ -280,7 +278,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await brightDataController.getInstagramReels(
+        const response = await instagramController.getInstagramReels(
           urlsArray
         );
         reply.send(response);

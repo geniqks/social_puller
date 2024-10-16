@@ -7,7 +7,7 @@
     "outDir": "build",
     "rootDir": ".",
     "strict": true,
-    "types": ["reflect-metadata"],
+    "types": ["reflect-metadata", "jest"],
     "baseUrl": ".",
     "paths": {
       "@api*": ["src/api*"],

@@ -18,8 +18,9 @@ export enum PostContentTypeEnum {
 export enum BrightDataStatusEnum {
   COLLECTING = "collecting",
   DIGESTING = "digesting",
-  RUNNING = "running",
-  READY = "ready",
+  DONE = "done",
   FAILED = "failed",
+  READY = "ready",
+  RUNNING = "running",
 }
 // #endregion

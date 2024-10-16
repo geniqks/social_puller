@@ -49,49 +49,6 @@ export class BrightDataController {
   }
 
   /**
-   * Get instagram comments from any instagram content
-   */
-  public async getInstagramComments(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_comments",
-      "instagram/comments/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramPosts(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_posts",
-      "instagram/posts/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramProfile(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_profile",
-      "instagram/profiles/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramReels(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_reels",
-      "instagram/reels/webhook",
-      urls
-    );
-  }
-
-  /**
    * Processes the webhook response from Bright Data
    * Removes URLs with warnings from the monitor and filters out responses with warnings
    */
@@ -128,7 +85,7 @@ export class BrightDataController {
   /**
    * Get data from bright data
    */
-  private async prepareAndTriggerBrightData(
+  public async prepareAndTriggerBrightData(
     dataset: keyof typeof this.brightDataDatasetIdsMapping,
     endpoint: string,
     urls: string[]
@@ -167,6 +124,7 @@ export class BrightDataController {
   }
 
   /**
+   * TODO: Ajouter un check pour vérifier si la requête est en erreur et si l'erreur est dead_page on acceptera jamais de retraiter cette url
    * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
    */
   private async requestLimiter(dataset_id: string, requested_urls: string[]) {
