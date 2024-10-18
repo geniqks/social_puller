@@ -1,5 +1,5 @@
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 /**
  * This model will be used to monitor the request to BrightData

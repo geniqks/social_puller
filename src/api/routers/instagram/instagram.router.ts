@@ -1,12 +1,12 @@
 import { InstagramController } from "@api/controllers/instagram/instagram.controller";
+import { IocContainer } from "@containers/inversify.container";
+import { IInstagramPosts } from "@interfaces/instagram.interface";
 import {
   FastifyInstance,
   FastifyPluginOptions,
   FastifyReply,
   FastifyRequest,
 } from "fastify";
-import { IocContainer } from "src/containers/inversify.container";
-import { IInstagramPosts } from "src/interfaces/instagram.interface";
 
 type BridghtDataQueryType = FastifyRequest<{
   Querystring: {
@@ -72,9 +72,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await instagramController.getInstagramPosts(
-          urlsArray
-        );
+        const response = await instagramController.getInstagramPosts(urlsArray);
         reply.send(response);
       } catch (error) {
         reply.status(500).send(error);
@@ -278,9 +276,7 @@ export default async function (
       const urlsArray = urls.split(",");
 
       try {
-        const response = await instagramController.getInstagramReels(
-          urlsArray
-        );
+        const response = await instagramController.getInstagramReels(urlsArray);
         reply.send(response);
       } catch (error) {
         reply.status(500).send(error);

@@ -8,6 +8,9 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  modulePathIgnorePatterns: [
+    "__tests__/utils"
+  ],
   moduleNameMapper: {
     '^@api(.*)$': '<rootDir>/src/api$1',
     '^@cli(.*)$': '<rootDir>/src/cli$1',
@@ -24,6 +27,8 @@ const config: Config = {
     '^@services(.*)$': '<rootDir>/src/services$1',
     '^@start(.*)$': '<rootDir>/src/start$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
+    '^@tests(.*)$': '<rootDir>/src/__tests__$1',
+    '^@containers(.*)$': '<rootDir>/src/containers$1',
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',

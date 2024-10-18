@@ -1,17 +1,17 @@
 import { HttpException } from "@api/errors/http-exception.error";
 import { bind } from "@decorators/bind.decorator";
+import {
+  BrightDataResponse,
+  IBrightDataQueryParams,
+  IBrightDataResponse,
+} from "@interfaces/brightdata.interface";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
-import {
-  BrightDataResponse,
-  IBrightDataQueryParams,
-  IBrightDataResponse,
-} from "src/interfaces/brightdata.interface";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper

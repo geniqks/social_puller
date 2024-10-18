@@ -11,14 +11,13 @@ export class InstagramController {
   constructor(
     private readonly brightDataController: BrightDataController,
     private readonly postRepository: PostRepository
-  ) { }
+  ) {}
 
   public async registerPosts(posts: IInstagramPosts[]) {
     const formattedPosts =
       await this.brightDataController.filterAndCleanBrightDataResponses(posts);
     await this.postRepository.createPost(formattedPosts as IInstagramPosts[]);
   }
-
 
   /**
    * Get instagram comments from any instagram content

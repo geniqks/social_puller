@@ -1,4 +1,6 @@
+import { IocContainer } from "@containers/inversify.container";
 import { IBrightDataMonitorInput } from "@models/brightdata-monitor.model";
+import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
 import {
   FastifyInstance,
   FastifyPluginOptions,
@@ -6,8 +8,6 @@ import {
   FastifyRequest,
 } from "fastify";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { IocContainer } from "src/containers/inversify.container";
-import { BrightDataMonitorRepository } from "src/repositories/brightdata-monitor.repository";
 
 /**
  * Because of the twitter API price, we will use it only to post on the bot account.

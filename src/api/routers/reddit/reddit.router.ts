@@ -1,3 +1,4 @@
+import { IocContainer } from "@containers/inversify.container";
 import { RedditDriver } from "@drivers/reddit.driver";
 import {
   FastifyInstance,
@@ -6,7 +7,6 @@ import {
   FastifyRequest,
 } from "fastify";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { IocContainer } from "src/containers/inversify.container";
 
 type CallbackQuery = FastifyRequest<{
   Querystring: {

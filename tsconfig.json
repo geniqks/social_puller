@@ -25,6 +25,8 @@
       "@services*": ["src/services*"],
       "@start*": ["src/start*"],
       "@utils*": ["src/utils*"],
+      "@tests*": ["src/__tests__*"],
+      "@containers*": ["src/containers*"]
     }
   },
   "include": ["src/**/*.ts"]

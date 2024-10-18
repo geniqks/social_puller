@@ -1,10 +1,10 @@
 import { bind } from "@decorators/bind.decorator";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import {
   BrightDataMonitorModel,
   IBrightDataMonitorInput,
 } from "@models/brightdata-monitor.model";
 import { injectable } from "inversify";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 @bind()
 @injectable()
