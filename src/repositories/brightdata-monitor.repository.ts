@@ -1,10 +1,10 @@
 import { bind } from "@decorators/bind.decorator";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import {
   BrightDataMonitorModel,
   IBrightDataMonitorInput,
 } from "@models/brightdata-monitor.model";
 import { injectable } from "inversify";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 @bind()
 @injectable()
@@ -126,7 +126,10 @@ export class BrightDataMonitorRepository {
     const processedTransactions = await BrightDataMonitorModel.find({
       requested_urls: { $in: requested_urls },
       created_at: { $gte: twentyFourHoursAgo },
-      status: BrightDataStatusEnum.READY,
+      $or: [
+        { status: BrightDataStatusEnum.READY },
+        { status: BrightDataStatusEnum.DONE },
+      ],
     }).lean();
 
     const problematicUrls = processedTransactions.flatMap(
