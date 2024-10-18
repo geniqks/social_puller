@@ -1,5 +1,4 @@
 {
-  "type": "commonjs",
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "format": "prettier --write \"src/**/*.ts\"",
