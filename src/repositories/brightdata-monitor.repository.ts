@@ -127,8 +127,8 @@ export class BrightDataMonitorRepository {
       requested_urls: { $in: requested_urls },
       created_at: { $gte: twentyFourHoursAgo },
       $or: [
-        { status: BrightDataStatusEnum.READY },
         { status: BrightDataStatusEnum.DONE },
+        { status: BrightDataStatusEnum.READY },
       ],
     }).lean();
 

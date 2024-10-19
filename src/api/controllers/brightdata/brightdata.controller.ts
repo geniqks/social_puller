@@ -101,7 +101,7 @@ export class BrightDataController {
     const brightDataQueryParams: IBrightDataQueryParams = {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
-      endpoint: `${this.host}${endpoint}`,
+      endpoint,
       notify: this.notify_url,
     };
 
