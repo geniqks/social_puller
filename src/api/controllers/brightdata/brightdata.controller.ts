@@ -1,17 +1,17 @@
 import { HttpException } from "@api/errors/http-exception.error";
 import { bind } from "@decorators/bind.decorator";
+import {
+  BrightDataResponse,
+  IBrightDataQueryParams,
+  IBrightDataResponse,
+} from "@interfaces/brightdata.interface";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
-import {
-  BrightDataResponse,
-  IBrightDataQueryParams,
-  IBrightDataResponse,
-} from "src/interfaces/brightdata.interface";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper
@@ -46,49 +46,6 @@ export class BrightDataController {
     this.brightDataToken = configService.get<string>("BRIGHT_DATA_TOKEN");
     this.host = configService.get<string>("HOST");
     this.notify_url = `${this.host}brightdata/monitor`;
-  }
-
-  /**
-   * Get instagram comments from any instagram content
-   */
-  public async getInstagramComments(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_comments",
-      "instagram/comments/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramPosts(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_posts",
-      "instagram/posts/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramProfile(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_profile",
-      "instagram/profiles/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramReels(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_reels",
-      "instagram/reels/webhook",
-      urls
-    );
   }
 
   /**
@@ -128,7 +85,7 @@ export class BrightDataController {
   /**
    * Get data from bright data
    */
-  private async prepareAndTriggerBrightData(
+  public async prepareAndTriggerBrightData(
     dataset: keyof typeof this.brightDataDatasetIdsMapping,
     endpoint: string,
     urls: string[]
@@ -144,7 +101,7 @@ export class BrightDataController {
     const brightDataQueryParams: IBrightDataQueryParams = {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
-      endpoint: `${this.host}${endpoint}`,
+      endpoint,
       notify: this.notify_url,
     };
 
@@ -167,6 +124,7 @@ export class BrightDataController {
   }
 
   /**
+   * TODO: Ajouter un check pour vérifier si la requête est en erreur et si l'erreur est dead_page on acceptera jamais de retraiter cette url
    * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
    */
   private async requestLimiter(dataset_id: string, requested_urls: string[]) {
@@ -223,7 +181,7 @@ export class BrightDataController {
       return response.data;
     } catch (error) {
       this.loggerService.pino.error(error);
-      throw Error("Error while fetching instagram comments");
+      throw Error("Error while fetching data from Brightdata");
     }
   }
 }

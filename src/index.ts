@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { IocContainer } from "./containers/inversify.container";
+
+import { IocContainer } from "@containers/inversify.container";
 // Need to init container before importing any modules
 IocContainer.initContainer();
 

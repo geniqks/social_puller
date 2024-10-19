@@ -7,6 +7,7 @@ import mongoose, { Mongoose } from "mongoose";
 @bind("singleton")
 @injectable()
 export class Mongo {
+  // TODO: la passer en readonly
   public static mongoose: Mongoose;
   constructor(
     private readonly logger: LoggerService,

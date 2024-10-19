@@ -1,6 +1,6 @@
 import { FastifyError } from "fastify";
 
-type HttpExceptionOptions = Omit<FastifyError, "name" | "code"> & {
+export type HttpExceptionOptions = Omit<FastifyError, "name" | "code"> & {
   urls?: string[];
 };
 

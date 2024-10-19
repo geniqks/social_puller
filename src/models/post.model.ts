@@ -1,9 +1,14 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 import {
   PostContentTypeEnum,
   PostOriginEnum,
 } from "src/interfaces/model.interface";
 
+@modelOptions({
+  options: {
+    customName: "posts",
+  },
+})
 export class PostDto {
   // URL of the post
   @prop()
