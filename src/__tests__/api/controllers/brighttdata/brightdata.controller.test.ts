@@ -4,20 +4,28 @@ import { IocContainer } from "@containers/inversify.container";
 IocContainer.initContainer();
 
 import { BrightDataController } from "@api/controllers/brightdata/brightdata.controller";
-import { HttpException } from "@api/errors/http-exception.error";
+import {
+  HttpException,
+  HttpExceptionOptions,
+} from "@api/errors/http-exception.error";
 import { StatusCodes } from "http-status-codes";
-import { it } from "node:test";
 
 const container = IocContainer.container;
 describe("BrightDataController", () => {
   const brightDataController = container.get(BrightDataController);
-  const urls = ["http://instagram/testurl1", "http://instagram/testurl2"];
+  const urls = [
+    "http://instagram/test1",
+    "http://instagram/test2",
+    "http://instagram/test3",
+  ];
   beforeEach(() => {
     container.snapshot();
     jest
       .spyOn(brightDataController as any, "triggerDataCollection")
-      .mockResolvedValue({
-        snapshot_id: 123,
+      .mockImplementation(() => {
+        return {
+          snapshot_id: 123,
+        };
       });
   });
 
@@ -26,30 +34,36 @@ describe("BrightDataController", () => {
   });
 
   describe("prepareAndTriggerBrightData", () => {
-    it("should throw an error because the url is being processing ", async () => {
+    it("should throw an error because the url is being processing", async () => {
+      const exception: HttpExceptionOptions = {
+        message: `A transaction is already in progress for the urls`,
+        urls: [urls[0]],
+        statusCode: StatusCodes.CONFLICT,
+      };
+
       jest
         .spyOn(brightDataController as any, "requestLimiter")
-        .mockResolvedValue(
-          new HttpException({
-            message: `A transaction is already in progress for the urls`,
-            urls: [urls[0]],
-            statusCode: StatusCodes.CONFLICT,
-          })
-        );
+        .mockRejectedValue(new HttpException(exception));
 
-      expect(
-        await brightDataController.prepareAndTriggerBrightData(
+      await expect(
+        brightDataController.prepareAndTriggerBrightData(
           "instagram_comments",
           "instagram/comments/webhook",
           urls
         )
-      ).toThrow(
-        new HttpException({
-          message: `A transaction is already in progress for the urls`,
-          urls: [urls[0]],
-          statusCode: StatusCodes.CONFLICT,
-        })
-      );
+      ).rejects.toThrow(HttpException);
+
+      jest
+        .spyOn(brightDataController as any, "requestLimiter")
+        .mockRejectedValue(exception);
+
+      await expect(
+        brightDataController.prepareAndTriggerBrightData(
+          "instagram_comments",
+          "instagram/comments/webhook",
+          urls
+        )
+      ).rejects.toEqual(exception);
     });
 
     it("stub prepareAndTriggerBrightData pour retourner salut", async () => {

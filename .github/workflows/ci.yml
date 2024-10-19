@@ -1,0 +1,21 @@
+name: Workflow
+on: 
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    types:
+      - opened
+    branches:    
+      - '*'
+jobs:
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+
+      - run: npm install
+      - run: npm  test
+        
