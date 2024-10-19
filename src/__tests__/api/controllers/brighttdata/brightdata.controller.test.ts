@@ -4,31 +4,70 @@ import { IocContainer } from "@containers/inversify.container";
 IocContainer.initContainer();
 
 import { BrightDataController } from "@api/controllers/brightdata/brightdata.controller";
+import { HttpException } from "@api/errors/http-exception.error";
+import { StatusCodes } from "http-status-codes";
+import { it } from "node:test";
 
 const container = IocContainer.container;
-
-test("adds 1 + 2 to equal 3", () => {
+describe("BrightDataController", () => {
   const brightDataController = container.get(BrightDataController);
-  expect(brightDataController).toBeDefined();
-});
+  const urls = ["http://instagram/testurl1", "http://instagram/testurl2"];
+  beforeEach(() => {
+    container.snapshot();
+    jest
+      .spyOn(brightDataController as any, "triggerDataCollection")
+      .mockResolvedValue({
+        snapshot_id: 123,
+      });
+  });
 
-// Example of how to sub a class
-test("stub prepareAndTriggerBrightData pour retourner salut", async () => {
-  const brightDataController = container.get(BrightDataController);
+  afterEach(() => {
+    container.restore();
+  });
 
-  jest
-    .spyOn(brightDataController, "prepareAndTriggerBrightData")
-    .mockResolvedValue({
-      snapshot_id: "123",
+  describe("prepareAndTriggerBrightData", () => {
+    it("should throw an error because the url is being processing ", async () => {
+      jest
+        .spyOn(brightDataController as any, "requestLimiter")
+        .mockResolvedValue(
+          new HttpException({
+            message: `A transaction is already in progress for the urls`,
+            urls: [urls[0]],
+            statusCode: StatusCodes.CONFLICT,
+          })
+        );
+
+      expect(
+        await brightDataController.prepareAndTriggerBrightData(
+          "instagram_comments",
+          "instagram/comments/webhook",
+          urls
+        )
+      ).toThrow(
+        new HttpException({
+          message: `A transaction is already in progress for the urls`,
+          urls: [urls[0]],
+          statusCode: StatusCodes.CONFLICT,
+        })
+      );
     });
 
-  const result = await brightDataController.prepareAndTriggerBrightData(
-    "instagram_posts",
-    "/endpoint",
-    ["https://example.com"]
-  );
+    it("stub prepareAndTriggerBrightData pour retourner salut", async () => {
+      jest
+        .spyOn(brightDataController, "prepareAndTriggerBrightData")
+        .mockResolvedValue({
+          snapshot_id: "123",
+        });
 
-  expect(result).toEqual({
-    snapshot_id: "123",
+      const result = await brightDataController.prepareAndTriggerBrightData(
+        "instagram_posts",
+        "/endpoint",
+        ["https://example.com"]
+      );
+
+      expect(result).toEqual({
+        snapshot_id: "123",
+      });
+    });
   });
 });

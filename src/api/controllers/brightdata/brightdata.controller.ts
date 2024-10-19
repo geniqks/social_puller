@@ -181,7 +181,7 @@ export class BrightDataController {
       return response.data;
     } catch (error) {
       this.loggerService.pino.error(error);
-      throw Error("Error while fetching instagram comments");
+      throw Error("Error while fetching data from Brightdata");
     }
   }
 }
