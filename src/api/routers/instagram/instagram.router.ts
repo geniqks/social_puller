@@ -71,7 +71,7 @@ export default async function (
       const { urls } = request.query;
       const urlsArray = urls.split(",");
 
-      const response = await brightDataController.getInstagramPosts(urlsArray);
+      const response = await instagramController.getInstagramPosts(urlsArray);
       reply.send(response);
     }
   );
@@ -244,9 +244,7 @@ export default async function (
       const { urls } = request.query;
       const urlsArray = urls.split(",");
 
-      const response = await brightDataController.getInstagramProfile(
-        urlsArray
-      );
+      const response = await instagramController.getInstagramProfile(urlsArray);
       reply.send(response);
     }
   );
@@ -267,7 +265,7 @@ export default async function (
       const { urls } = request.query;
       const urlsArray = urls.split(",");
 
-      const response = await brightDataController.getInstagramReels(urlsArray);
+      const response = await instagramController.getInstagramReels(urlsArray);
       reply.send(response);
     }
   );
