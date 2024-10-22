@@ -1,12 +1,13 @@
 import { bind } from "@decorators/bind.decorator";
+import { IInstagramPosts } from "@interfaces/instagram.interface";
+import { PostOriginEnum } from "@interfaces/model.interface";
 import { PostDto, PostModel } from "@models/post.model";
 import { injectable } from "inversify";
-import { IInstagramPosts } from "src/interfaces/instagram.interface";
-import { PostOriginEnum } from "src/interfaces/model.interface";
 
 @bind()
 @injectable()
 export class PostRepository {
+  //TODO: update le type de retour
   public async createPost(posts: IInstagramPosts[]): Promise<any> {
     const formattedPosts: PostDto[] = posts.map((post) => ({
       url: post.url,

@@ -238,7 +238,7 @@ export default async function (
   );
 
   fastify.get(
-    "/profiles",
+    "/profile",
     querySchema,
     async (request: BridghtDataQueryType, reply: FastifyReply) => {
       const { urls } = request.query;
@@ -250,7 +250,7 @@ export default async function (
   );
 
   fastify.post(
-    "/profiles/webhook",
+    "/profile/webhook",
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { body } = request;
       console.log(body);

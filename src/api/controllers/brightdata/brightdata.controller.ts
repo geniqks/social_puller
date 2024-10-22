@@ -24,6 +24,7 @@ export class BrightDataController {
     instagram_posts: "gd_lk5ns7kz21pck8jpis",
     instagram_profile: "gd_l1vikfch901nx3by4",
     instagram_reels: "gd_lyclm20il4r5helnj",
+    twitter_profile: "gd_lwxmeb2u1cniijd7t4",
   };
   private readonly brightDataBaseApiUrl =
     "https://api.brightdata.com/datasets/v3/trigger";
@@ -52,13 +53,14 @@ export class BrightDataController {
    * Processes the webhook response from Bright Data
    * Removes URLs with warnings from the monitor and filters out responses with warnings
    */
-  public async filterAndCleanBrightDataResponses(
-    brightDataResponses: BrightDataResponse[]
-  ) {
+  public async filterAndCleanBrightDataResponses<T extends BrightDataResponse>(
+    brightDataResponses: T[]
+  ): Promise<T[]> {
     const brightDataResponsesWithWarning = brightDataResponses.filter(
       (item) => item?.warning
     );
 
+    // TODO: voir pour garder en mémoire les urls en erreur et potentiellement autoriser 1 requête pas semaine sur les urls en erreur
     for (const brightDataResponseWithWarning of brightDataResponsesWithWarning) {
       if (brightDataResponseWithWarning.input) {
         await this.brightDataMonitorRepository.removeUrlFromBrightDataMonitor(
@@ -127,7 +129,10 @@ export class BrightDataController {
    * TODO: Ajouter un check pour vérifier si la requête est en erreur et si l'erreur est dead_page on acceptera jamais de retraiter cette url
    * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
    */
-  private async requestLimiter(dataset_id: string, requested_urls: string[]) {
+  private async requestLimiter(
+    dataset_id: string,
+    requested_urls: string[]
+  ): Promise<void> {
     const hasTransactionInProgress =
       await this.brightDataMonitorRepository.hasPendingTransactions(
         dataset_id,
@@ -166,6 +171,7 @@ export class BrightDataController {
     queryParams: IBrightDataQueryParams,
     formattedUrls: { url: string }[]
   ): Promise<IBrightDataResponse> {
+    queryParams.endpoint = `${this.host}${queryParams.endpoint}`;
     try {
       const response = await axios<IBrightDataResponse>({
         method: "POST",

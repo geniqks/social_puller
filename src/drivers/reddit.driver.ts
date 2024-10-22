@@ -34,7 +34,7 @@ export class RedditDriver extends BaseDriver {
    * For more information about the authorization you can refer to the documentation below
    * https://github.com/reddit-archive/reddit/wiki/OAuth2#authorization
    */
-  async authorize(): Promise<string> {
+  public async authorize(): Promise<string> {
     // All scopes are available here
     // https://www.reddit.com/api/v1/scopes
     const scopes = [
@@ -75,7 +75,7 @@ export class RedditDriver extends BaseDriver {
    *
    * Note: The token will need to be saved in the .env file. Once this is done you need to delete 'reddit_token.txt'
    */
-  async callbackHandler(code: string): Promise<boolean> {
+  public async callbackHandler(code: string): Promise<boolean> {
     const axiosOptions: AxiosRequestConfig = {
       method: "POST",
       url: "https://www.reddit.com/api/v1/access_token",
