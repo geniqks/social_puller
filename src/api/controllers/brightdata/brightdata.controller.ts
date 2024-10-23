@@ -171,12 +171,16 @@ export class BrightDataController {
     queryParams: IBrightDataQueryParams,
     formattedUrls: { url: string }[]
   ): Promise<IBrightDataResponse> {
-    queryParams.endpoint = `${this.host}${queryParams.endpoint}`;
+    const updatedQueryParams = {
+      ...queryParams,
+      endpoint: `${this.host}${queryParams.endpoint}`,
+    };
+
     try {
       const response = await axios<IBrightDataResponse>({
         method: "POST",
         url: this.brightDataBaseApiUrl,
-        params: queryParams,
+        params: updatedQueryParams,
         headers: {
           Authorization: `Bearer ${this.brightDataToken}`,
           "Content-Type": "application/json",
