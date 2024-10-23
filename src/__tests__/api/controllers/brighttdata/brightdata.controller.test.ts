@@ -18,8 +18,10 @@ describe("BrightDataController", () => {
     "http://instagram/test2",
     "http://instagram/test3",
   ];
+
   beforeEach(() => {
     container.snapshot();
+    // TODO: override bdd data collection to return a fake data, so that the test is not dependant of the bdd
     jest
       .spyOn(brightDataController as any, "triggerDataCollection")
       .mockImplementation(() => {
