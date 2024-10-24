@@ -2,3 +2,4 @@
 node_modules
 coverage
 *.txt
+.DS_Store
