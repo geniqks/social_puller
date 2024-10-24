@@ -1,9 +1,16 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 import {
   PostContentTypeEnum,
   PostOriginEnum,
 } from "src/interfaces/model.interface";
 
+// TODO: potentiellement mettre une date afin de pouvoir traquer l'évolution d'un post sur plusieurs jours ou mois
+// TODO: ne jamais supprimer une data antierieur aux posts
+@modelOptions({
+  options: {
+    customName: "posts",
+  },
+})
 export class PostDto {
   // URL of the post
   @prop()

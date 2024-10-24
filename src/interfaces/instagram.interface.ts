@@ -32,10 +32,10 @@ export interface IInstagramProfile extends IBrightDataWebhookResponse {
   is_business_account: boolean;
   is_professional_account: boolean;
   is_verified: boolean;
-  avg_engagement: number | null;
-  external_url: string | null;
+  avg_engagement: number | undefined;
+  external_url: string[] | undefined;
   biography: string;
-  business_category_name: string | null;
+  business_category_name: string;
   category_name: string | null;
   post_hashtags: string[];
   following: number;
@@ -51,7 +51,7 @@ export interface IInstagramProfile extends IBrightDataWebhookResponse {
     carousel_media_urls?: Array<{ image_url: string }>;
   }>;
   profile_image_link: string;
-  profile_url: string | null;
+  profile_url: string;
   profile_name: string;
   highlights_count: number;
   highlights: Array<{
@@ -61,7 +61,7 @@ export interface IInstagramProfile extends IBrightDataWebhookResponse {
     title: string;
   }>;
   full_name: string;
-  is_private: boolean | null;
+  is_private: boolean;
   bio_hashtags: string[] | null;
   url: string | null;
   is_joined_recently: boolean | null;

@@ -1,17 +1,17 @@
 import { HttpException } from "@api/errors/http-exception.error";
 import { bind } from "@decorators/bind.decorator";
+import {
+  BrightDataResponse,
+  IBrightDataQueryParams,
+  IBrightDataResponse,
+} from "@interfaces/brightdata.interface";
+import { BrightDataStatusEnum } from "@interfaces/model.interface";
 import { BrightDataMonitorRepository } from "@repositories/brightdata-monitor.repository";
 import { ConfigService } from "@services/config.service";
 import { LoggerService } from "@services/logger.service";
 import axios from "axios";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { injectable } from "inversify";
-import {
-  BrightDataResponse,
-  IBrightDataQueryParams,
-  IBrightDataResponse,
-} from "src/interfaces/brightdata.interface";
-import { BrightDataStatusEnum } from "src/interfaces/model.interface";
 
 /**
  * BrightDataController is used to get instagram data from brightdata scraper
@@ -24,6 +24,7 @@ export class BrightDataController {
     instagram_posts: "gd_lk5ns7kz21pck8jpis",
     instagram_profile: "gd_l1vikfch901nx3by4",
     instagram_reels: "gd_lyclm20il4r5helnj",
+    twitter_profile: "gd_lwxmeb2u1cniijd7t4",
   };
   private readonly brightDataBaseApiUrl =
     "https://api.brightdata.com/datasets/v3/trigger";
@@ -49,59 +50,17 @@ export class BrightDataController {
   }
 
   /**
-   * Get instagram comments from any instagram content
-   */
-  public async getInstagramComments(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_comments",
-      "instagram/comments/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramPosts(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_posts",
-      "instagram/posts/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramProfile(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_profile",
-      "instagram/profiles/webhook",
-      urls
-    );
-  }
-
-  public async getInstagramReels(
-    urls: string[]
-  ): Promise<IBrightDataResponse | void> {
-    return this.prepareAndTriggerBrightData(
-      "instagram_reels",
-      "instagram/reels/webhook",
-      urls
-    );
-  }
-
-  /**
    * Processes the webhook response from Bright Data
    * Removes URLs with warnings from the monitor and filters out responses with warnings
    */
-  public async filterAndCleanBrightDataResponses(
-    brightDataResponses: BrightDataResponse[]
-  ) {
+  public async filterAndCleanBrightDataResponses<T extends BrightDataResponse>(
+    brightDataResponses: T[]
+  ): Promise<T[]> {
     const brightDataResponsesWithWarning = brightDataResponses.filter(
       (item) => item?.warning
     );
 
+    // TODO: voir pour garder en mémoire les urls en erreur et potentiellement autoriser 1 requête pas semaine sur les urls en erreur
     for (const brightDataResponseWithWarning of brightDataResponsesWithWarning) {
       if (brightDataResponseWithWarning.input) {
         await this.brightDataMonitorRepository.removeUrlFromBrightDataMonitor(
@@ -128,7 +87,7 @@ export class BrightDataController {
   /**
    * Get data from bright data
    */
-  private async prepareAndTriggerBrightData(
+  public async prepareAndTriggerBrightData(
     dataset: keyof typeof this.brightDataDatasetIdsMapping,
     endpoint: string,
     urls: string[]
@@ -144,7 +103,7 @@ export class BrightDataController {
     const brightDataQueryParams: IBrightDataQueryParams = {
       ...this.brightDataQueryParams,
       dataset_id: this.brightDataDatasetIdsMapping[dataset],
-      endpoint: `${this.host}${endpoint}`,
+      endpoint,
       notify: this.notify_url,
     };
 
@@ -167,9 +126,13 @@ export class BrightDataController {
   }
 
   /**
+   * TODO: Ajouter un check pour vérifier si la requête est en erreur et si l'erreur est dead_page on acceptera jamais de retraiter cette url
    * Check if there is a transaction in progress or if there are transactions completed in the last 24 hours
    */
-  private async requestLimiter(dataset_id: string, requested_urls: string[]) {
+  private async requestLimiter(
+    dataset_id: string,
+    requested_urls: string[]
+  ): Promise<void> {
     const hasTransactionInProgress =
       await this.brightDataMonitorRepository.hasPendingTransactions(
         dataset_id,
@@ -208,11 +171,16 @@ export class BrightDataController {
     queryParams: IBrightDataQueryParams,
     formattedUrls: { url: string }[]
   ): Promise<IBrightDataResponse> {
+    const updatedQueryParams = {
+      ...queryParams,
+      endpoint: `${this.host}${queryParams.endpoint}`,
+    };
+
     try {
       const response = await axios<IBrightDataResponse>({
         method: "POST",
         url: this.brightDataBaseApiUrl,
-        params: queryParams,
+        params: updatedQueryParams,
         headers: {
           Authorization: `Bearer ${this.brightDataToken}`,
           "Content-Type": "application/json",
@@ -223,7 +191,7 @@ export class BrightDataController {
       return response.data;
     } catch (error) {
       this.loggerService.pino.error(error);
-      throw Error("Error while fetching instagram comments");
+      throw Error("Error while fetching data from Brightdata");
     }
   }
 }
