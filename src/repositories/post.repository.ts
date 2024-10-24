@@ -7,8 +7,9 @@ import { injectable } from "inversify";
 @bind()
 @injectable()
 export class PostRepository {
-  //TODO: update le type de retour
-  public async createPost(posts: IInstagramPosts[]): Promise<any> {
+  public async createInstagramPost(
+    posts: IInstagramPosts[]
+  ): Promise<PostDto[]> {
     const formattedPosts: PostDto[] = posts.map((post) => ({
       url: post.url,
       post_id: post.post_id,

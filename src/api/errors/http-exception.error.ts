@@ -1,4 +1,5 @@
 import { FastifyError } from "fastify";
+import { StatusCodes } from "http-status-codes";
 
 export type HttpExceptionOptions = Omit<FastifyError, "name" | "code"> & {
   urls?: string[];
@@ -13,7 +14,8 @@ export class HttpException extends Error {
 
   constructor(fastifyError: HttpExceptionOptions) {
     super(fastifyError.message);
-    this._statusCode = fastifyError.statusCode ?? 500;
+    this._statusCode =
+      fastifyError.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR;
     this._urls = fastifyError.urls;
     Object.setPrototypeOf(this, HttpException.prototype);
   }

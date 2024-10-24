@@ -18,11 +18,10 @@ export class InstagramController {
     private readonly profileRepository: ProfileRepository
   ) {}
 
-  // TODO: ajouter un générique pour enlever le as
   public async registerPosts(posts: IInstagramPosts[]) {
     const formattedPosts =
       await this.brightDataController.filterAndCleanBrightDataResponses(posts);
-    await this.postRepository.createPost(formattedPosts);
+    await this.postRepository.createInstagramPost(formattedPosts);
   }
 
   public async registerProfile(profile: IInstagramProfile[]) {

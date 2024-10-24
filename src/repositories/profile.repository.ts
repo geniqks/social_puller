@@ -8,7 +8,7 @@ import { injectable } from "inversify";
 export class ProfileRepository {
   public async createInstagramProfile(
     profiles: IInstagramProfile[]
-  ): Promise<any> {
+  ): Promise<ProfileDto[]> {
     const formattedProfiles: ProfileDto[] = profiles.map((profile) => ({
       id: profile.id,
       profile_url: profile.profile_url,
