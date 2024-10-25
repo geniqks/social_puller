@@ -1,58 +1,64 @@
-import { prop } from '@typegoose/typegoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+
+export type ProfileDocument = HydratedDocument<ProfileModel>;
 
 // TODO: for instagram and twitter, all post from user account are in the profile response
 // TODO: potentiellement créer un moniteur pour pouvoir suivre l'évolution des followers, posts, etc
-export class ProfileDto {
-  @prop()
+@Schema()
+export class ProfileModel {
+  @Prop()
   public id!: string;
 
-  @prop()
+  @Prop()
   public profile_url!: string;
 
   // Only for instagram
-  @prop()
+  @Prop()
   public is_business_account?: boolean;
 
   // Only for instagram
-  @prop()
+  @Prop()
   public is_professional_account?: boolean;
 
-  @prop()
+  @Prop()
   public followers!: number;
 
-  @prop()
+  @Prop()
   public is_verified!: boolean;
 
   // TODO: a voir ce que cela représente
-  @prop()
+  @Prop()
   public avg_engagement?: number;
 
   // only for instagram
-  @prop({ type: () => [String] })
+  @Prop({ type: () => [String] })
   public external_url?: string[];
 
   // only for instagram
-  @prop()
+  @Prop()
   public business_category_name?: string;
 
-  @prop()
+  @Prop()
   public biography!: string;
 
-  @prop()
+  @Prop()
   public following!: number;
 
-  @prop()
+  @Prop()
   public full_name?: string;
 
-  @prop()
+  @Prop()
   public is_private!: boolean;
 
   // Only for twitter
   // TODO: find a way to get it from instagram profile
-  @prop()
+  @Prop()
   public profile_image_link?: string;
 
   // Only for twitter
-  @prop()
+  @Prop()
   public date_joined?: Date;
 }
+
+export const ProfileSchema = SchemaFactory.createForClass(ProfileModel);

@@ -1,16 +1,15 @@
 import { BrightDataStatusEnum } from '@drivers/brightdata/enums/bright-data-status.enum';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { IBrightDataMonitorInput } from '../interfaces/brightdata-monitor-input.interface';
-import {
-  BRIGHTDATA_MONITOR_MODEL,
-  BrightDataMonitorModel,
-} from '../model/brightdata-monitor.model';
+import { BrightDataMonitorModel } from '../schemas/brightdata-monitor.schema';
 
 @Injectable()
 export class BrightDataMonitorRepository {
   constructor(
-    @Inject(BRIGHTDATA_MONITOR_MODEL)
-    private readonly brightDataMonitorModel: typeof BrightDataMonitorModel,
+    @InjectModel(BrightDataMonitorModel.name)
+    private readonly brightDataMonitorModel: Model<BrightDataMonitorModel>,
   ) {}
 
   /**

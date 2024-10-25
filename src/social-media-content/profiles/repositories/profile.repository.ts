@@ -1,18 +1,20 @@
 import { IInstagramProfile } from '@drivers/instagram/interfaces/instagram.interface';
-import { Inject, Injectable } from '@nestjs/common';
-import { ProfileDto } from '../dto/profile.dto';
-import { PROFILE_MODEL, ProfileModel } from '../models/profile.model';
+import { Injectable } from '@nestjs/common';
+import { ProfileModel } from '../schemas/profile.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ProfileRepository {
   constructor(
-    @Inject(PROFILE_MODEL) private profileModel: typeof ProfileModel,
+    @InjectModel(ProfileModel.name)
+    private readonly profileModel: Model<ProfileModel>,
   ) {}
 
   public async createInstagramProfile(
     profiles: IInstagramProfile[],
-  ): Promise<ProfileDto[]> {
-    const formattedProfiles: ProfileDto[] = profiles.map((profile) => ({
+  ): Promise<ProfileModel[]> {
+    const formattedProfiles: ProfileModel[] = profiles.map((profile) => ({
       id: profile.id,
       profile_url: profile.profile_url,
       is_business_account: profile.is_business_account,

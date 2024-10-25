@@ -1,19 +1,20 @@
 import { IInstagramPosts } from '@drivers/instagram/interfaces/instagram.interface';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { ContentOriginEnum } from '@social-media-content/enum/content-origin.enum';
-import { PostDto } from '../dto/post.dto';
-import { POST_MODEL, PostModel } from '../models/post.model';
+import { Model } from 'mongoose';
+import { PostModel } from '../schemas/post.schema';
 
 @Injectable()
 export class PostRepository {
   constructor(
-    @Inject(POST_MODEL) private readonly postModel: typeof PostModel,
+    @InjectModel(PostModel.name) private readonly postModel: Model<PostModel>,
   ) {}
 
   public async createInstagramPost(
     posts: IInstagramPosts[],
-  ): Promise<PostDto[]> {
-    const formattedPosts: PostDto[] = posts.map((post) => ({
+  ): Promise<PostModel[]> {
+    const formattedPosts: PostModel[] = posts.map((post) => ({
       url: post.url,
       post_id: post.post_id,
       location: post.location,
