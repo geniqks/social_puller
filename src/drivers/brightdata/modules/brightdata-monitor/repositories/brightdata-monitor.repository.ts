@@ -21,7 +21,7 @@ export class BrightDataMonitorRepository {
     brightDataMonitorInput: IBrightDataMonitorInput,
   ): Promise<void> {
     try {
-      await BrightDataMonitorModel.create(brightDataMonitorInput);
+      await this.brightDataMonitorModel.create(brightDataMonitorInput);
     } catch (error) {
       throw new Error(`Error registering transaction: ${error}`);
     }
@@ -34,7 +34,7 @@ export class BrightDataMonitorRepository {
     snapshot_id: string,
     url: string,
   ): Promise<IBrightDataMonitorInput | null> {
-    return await BrightDataMonitorModel.findOne({ snapshot_id, url });
+    return await this.brightDataMonitorModel.findOne({ snapshot_id, url });
   }
 
   /**
@@ -54,7 +54,7 @@ export class BrightDataMonitorRepository {
       updateFields.error_message = brightDataMonitorInput.error_message;
     }
 
-    await BrightDataMonitorModel.updateOne(
+    await this.brightDataMonitorModel.updateOne(
       {
         snapshot_id: brightDataMonitorInput.snapshot_id,
       },
@@ -68,7 +68,7 @@ export class BrightDataMonitorRepository {
    * Remove a url from the brightdata monitor
    */
   public async removeUrlFromBrightDataMonitor(url: string): Promise<void> {
-    const transaction = await BrightDataMonitorModel.findOne({
+    const transaction = await this.brightDataMonitorModel.findOne({
       requested_urls: url,
     });
 
@@ -82,9 +82,9 @@ export class BrightDataMonitorRepository {
       transaction.requested_urls?.length === 1 &&
       transaction.requested_urls?.[0] === url
     ) {
-      await BrightDataMonitorModel.deleteOne({ _id: transaction._id });
+      await this.brightDataMonitorModel.deleteOne({ _id: transaction._id });
     } else {
-      await BrightDataMonitorModel.updateOne(
+      await this.brightDataMonitorModel.updateOne(
         { _id: transaction._id },
         { $pull: { requested_urls: url } },
       );
@@ -99,11 +99,13 @@ export class BrightDataMonitorRepository {
     dataset_id: string,
     requested_urls: string[],
   ): Promise<{ hasPending: boolean; problematicUrl?: string[] }> {
-    const pendingTransaction = await BrightDataMonitorModel.findOne({
-      dataset_id,
-      requested_urls: { $in: requested_urls },
-      status: { $eq: BrightDataStatusEnum.RUNNING },
-    }).lean();
+    const pendingTransaction = await this.brightDataMonitorModel
+      .findOne({
+        dataset_id,
+        requested_urls: { $in: requested_urls },
+        status: { $eq: BrightDataStatusEnum.RUNNING },
+      })
+      .lean();
 
     if (!pendingTransaction) {
       return { hasPending: false };
@@ -127,14 +129,16 @@ export class BrightDataMonitorRepository {
     urls?: string[];
   }> {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const processedTransactions = await BrightDataMonitorModel.find({
-      requested_urls: { $in: requested_urls },
-      created_at: { $gte: twentyFourHoursAgo },
-      $or: [
-        { status: BrightDataStatusEnum.DONE },
-        { status: BrightDataStatusEnum.READY },
-      ],
-    }).lean();
+    const processedTransactions = await this.brightDataMonitorModel
+      .find({
+        requested_urls: { $in: requested_urls },
+        created_at: { $gte: twentyFourHoursAgo },
+        $or: [
+          { status: BrightDataStatusEnum.DONE },
+          { status: BrightDataStatusEnum.READY },
+        ],
+      })
+      .lean();
 
     const problematicUrls = processedTransactions.flatMap(
       (transaction) =>
