@@ -16,6 +16,10 @@ enum Environment {
   Provision = 'provision',
 }
 
+/**
+ * Environment variables for the application
+ * It is also used to validate the environment variables with class-validator
+ */
 export class EnvironmentVariables {
   @IsString()
   BRIGHT_DATA_TOKEN: string;
