@@ -1,15 +1,33 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Redirect } from '@nestjs/common';
+import { ReasonPhrases } from 'http-status-codes';
+import { RedditDriver } from '../driver/reddit.driver';
 
 @Controller('reddit')
 export class RedditController {
+  constructor(private readonly redditDriver: RedditDriver) {}
+
   @Get('auth')
-  public async auth(@Query() query: { urls: string[] }): Promise<string> {
-    return 'salut';
+  @Redirect()
+  public async auth() {
+    const authUrl = await this.redditDriver.authorize();
+    return {
+      url: authUrl,
+    };
   }
 
   @Get('auth/callback')
-  public async getAuthCallback(): Promise<string> {
-    return 'salut';
+  public async getAuthCallback(
+    @Query() query: { code: string; state: string },
+  ) {
+    const hasBeenAuthorized = await this.redditDriver.callbackHandler(
+      query.code,
+    );
+
+    if (hasBeenAuthorized) {
+      return { message: ReasonPhrases.OK };
+    } else {
+      return { message: ReasonPhrases.UNAUTHORIZED };
+    }
   }
 
   @Get('/r/:subreddit')

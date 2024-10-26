@@ -65,17 +65,18 @@ export class RedditDriver extends BaseDriver {
    *
    * Note: The token will need to be saved in the .env file. Once this is done you need to delete 'reddit_token.txt'
    */
-  public async callbackHandler(code: string): Promise<void> {
+  public async callbackHandler(code: string): Promise<boolean> {
     const response = await firstValueFrom(
       this.httpService
         .post<{ access_token: string }>(
           'https://www.reddit.com/api/v1/access_token',
+          {},
           {
-            grant_type: 'authorization_code',
-            code,
-            redirect_uri: this.configService.get('REDDIT_REDIRECT_URI'),
-          },
-          {
+            params: {
+              grant_type: 'authorization_code',
+              code,
+              redirect_uri: this.configService.get('REDDIT_REDIRECT_URI'),
+            },
             headers: {
               'User-Agent': this.configService.get('REDDIT_USER_AGENT'),
             },
@@ -100,5 +101,9 @@ export class RedditDriver extends BaseDriver {
         Logger.log('Token saved');
       }
     });
+
+    if (response.data.access_token) {
+      return true;
+    }
   }
 }
