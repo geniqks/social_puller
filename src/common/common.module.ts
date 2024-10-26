@@ -1,9 +1,15 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from './config/config.module';
-import { AxiosModule } from './axios/axios.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [DatabaseModule, ConfigModule, AxiosModule]
+  imports: [
+    HttpModule.register({
+      global: true,
+    }),
+    DatabaseModule,
+    ConfigModule,
+  ],
 })
 export class CommonModule {}
