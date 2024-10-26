@@ -7,7 +7,9 @@ const exported = [PostRepository];
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: PostModel.name, schema: PostSchema }]),
+    MongooseModule.forFeature([
+      { name: PostModel.name, schema: PostSchema, collection: 'posts' },
+    ]),
   ],
   providers: [...exported],
   exports: exported,

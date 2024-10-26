@@ -15,6 +15,7 @@ const exported = [BrightDataMonitorRepository];
       {
         name: BrightDataMonitorModel.name,
         schema: BrightDataMonitorSchema,
+        collection: 'brightdata_monitors',
       },
     ]),
   ],
