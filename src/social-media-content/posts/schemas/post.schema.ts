@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ContentOriginEnum } from '@social-media-content/enum/content-origin.enum';
+import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { PostContentTypeEnum } from '../enums/post-content-type.enum';
-import { HydratedDocument } from 'mongoose';
 
 // TODO: potentiellement mettre une date afin de pouvoir traquer l'évolution d'un post sur plusieurs jours ou mois
 // TODO: ne jamais supprimer une data antierieur aux posts
@@ -80,7 +80,7 @@ export class PostModel {
   public is_paid_partnership?: boolean;
 
   // Audio of the post
-  @Prop()
+  @Prop({ default: null, type: MongooseSchema.Types.Mixed })
   public audio?: {
     audio_asset_id: string;
     ig_artist_id: string;

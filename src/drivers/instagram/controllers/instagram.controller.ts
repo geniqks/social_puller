@@ -42,10 +42,7 @@ export class InstagramController {
 
   @Get('profile')
   public async getProfile(@Query(ValidationPipe) query: UrlsValidatorDto) {
-    const response = await this.instagramService.getInstagramProfile(
-      query.urls,
-    );
-    return response;
+    return this.instagramService.getInstagramProfile(query.urls);
   }
 
   @Post('profile/webhook')
