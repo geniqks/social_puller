@@ -59,6 +59,12 @@ export class ProfileModel {
   // Only for twitter
   @Prop()
   public date_joined?: Date;
+
+  @Prop({ default: () => new Date() })
+  public created_at?: Date;
+
+  @Prop({ default: () => new Date() })
+  public updated_at?: Date;
 }
 
 export const ProfileSchema = SchemaFactory.createForClass(ProfileModel);
