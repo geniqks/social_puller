@@ -1,6 +1,14 @@
-import { Controller, Get, Param, Query, Redirect } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Redirect,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ReasonPhrases } from 'http-status-codes';
 import { RedditDriver } from '../driver/reddit.driver';
+import { RedditCallbackValidatorDto } from '../dto/validators/reddit-callback-validator.dto';
 
 @Controller('reddit')
 export class RedditController {
@@ -17,7 +25,7 @@ export class RedditController {
 
   @Get('auth/callback')
   public async getAuthCallback(
-    @Query() query: { code: string; state: string },
+    @Query(ValidationPipe) query: RedditCallbackValidatorDto,
   ) {
     const hasBeenAuthorized = await this.redditDriver.callbackHandler(
       query.code,
