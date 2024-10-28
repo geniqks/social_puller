@@ -20,7 +20,7 @@ export class InstagramController {
 
   @Get('comments')
   public async getComments(@Query(ValidationPipe) query: UrlsValidatorDto) {
-    return this.instagramService.getInstagramComments(query.urls);
+    return this.instagramService.getComments(query.urls);
   }
 
   @Post('comments/webhook')
@@ -32,7 +32,7 @@ export class InstagramController {
 
   @Get('posts')
   public async getPosts(@Query(ValidationPipe) query: UrlsValidatorDto) {
-    return this.instagramService.getInstagramPosts(query.urls);
+    return this.instagramService.getPosts(query.urls);
   }
 
   @Post('posts/webhook')
@@ -42,7 +42,7 @@ export class InstagramController {
 
   @Get('profile')
   public async getProfile(@Query(ValidationPipe) query: UrlsValidatorDto) {
-    return this.instagramService.getInstagramProfile(query.urls);
+    return this.instagramService.getProfile(query.urls);
   }
 
   @Post('profile/webhook')

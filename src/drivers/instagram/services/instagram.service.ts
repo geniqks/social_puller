@@ -2,11 +2,11 @@ import { IBrightDataResponse } from '@drivers/brightdata/interfaces/brightdata.i
 import { BrightdataService } from '@drivers/brightdata/services/brightdata.service';
 import { Injectable } from '@nestjs/common';
 import { PostRepository } from '@social-media-content/posts/repositories/post.repository';
+import { ProfileRepository } from '@social-media-content/profiles/repositories/profile.repository';
 import {
   IInstagramPosts,
   IInstagramProfile,
 } from '../interfaces/instagram.interface';
-import { ProfileRepository } from '@social-media-content/profiles/repositories/profile.repository';
 
 @Injectable()
 export class InstagramService {
@@ -31,7 +31,7 @@ export class InstagramService {
   /**
    * Get instagram comments from any instagram content
    */
-  public async getInstagramComments(
+  public async getComments(
     urls: string[],
   ): Promise<IBrightDataResponse | void> {
     return this.brightDataService.prepareAndTriggerBrightData(
@@ -41,9 +41,7 @@ export class InstagramService {
     );
   }
 
-  public async getInstagramPosts(
-    urls: string[],
-  ): Promise<IBrightDataResponse | void> {
+  public async getPosts(urls: string[]): Promise<IBrightDataResponse | void> {
     return this.brightDataService.prepareAndTriggerBrightData(
       'instagram_posts',
       'instagram/posts/webhook',
@@ -51,9 +49,7 @@ export class InstagramService {
     );
   }
 
-  public async getInstagramProfile(
-    urls: string[],
-  ): Promise<IBrightDataResponse | void> {
+  public async getProfile(urls: string[]): Promise<IBrightDataResponse | void> {
     return this.brightDataService.prepareAndTriggerBrightData(
       'instagram_profile',
       'instagram/profile/webhook',
@@ -61,9 +57,7 @@ export class InstagramService {
     );
   }
 
-  public async getInstagramReels(
-    urls: string[],
-  ): Promise<IBrightDataResponse | void> {
+  public async getReels(urls: string[]): Promise<IBrightDataResponse | void> {
     return this.brightDataService.prepareAndTriggerBrightData(
       'instagram_reels',
       'instagram/reels/webhook',
