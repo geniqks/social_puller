@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TwitterController } from './controllers/twitter.controller';
-import { TwitterService } from './driver/twitter.driver';
+import { TwitterDriver } from './driver/twitter.driver';
 
-const exporteds = [TwitterService];
+const exporteds = [TwitterDriver];
 @Module({
   controllers: [TwitterController],
   providers: [...exporteds],

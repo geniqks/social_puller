@@ -1,9 +1,13 @@
 import {
-  IInstagramPosts,
   IInstagramComments,
+  IInstagramPosts,
   IInstagramProfile,
   IInstagramReels,
 } from '@drivers/instagram/interfaces/instagram.interface';
+import {
+  ITwitterPosts,
+  ITwitterProfile,
+} from '@drivers/twitter/interfaces/twitter.interface';
 import { BrightDataStatusEnum } from '../enums/bright-data-status.enum';
 
 export interface IBrightDataWebhookResponse {
@@ -45,4 +49,6 @@ export type BrightDataResponse =
   | IInstagramPosts
   | IInstagramComments
   | IInstagramProfile
-  | IInstagramReels;
+  | IInstagramReels
+  | ITwitterProfile
+  | ITwitterPosts;

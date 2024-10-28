@@ -26,6 +26,7 @@ export class BrightdataService {
     instagram_profile: 'gd_l1vikfch901nx3by4',
     instagram_reels: 'gd_lyclm20il4r5helnj',
     twitter_profile: 'gd_lwxmeb2u1cniijd7t4',
+    twitter_posts: 'gd_lwxkxvnf1cynvib9co',
   };
   private readonly brightDataBaseApiUrl =
     'https://api.brightdata.com/datasets/v3/trigger';

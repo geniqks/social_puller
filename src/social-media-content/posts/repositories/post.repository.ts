@@ -1,4 +1,5 @@
 import { IInstagramPosts } from '@drivers/instagram/interfaces/instagram.interface';
+import { ITwitterPosts } from '@drivers/twitter/interfaces/twitter.interface';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ContentOriginEnum } from '@social-media-content/enum/content-origin.enum';
@@ -32,6 +33,27 @@ export class PostRepository {
       is_paid_partnership: post.is_paid_partnership,
       audio: post.audio,
       origin: ContentOriginEnum.INSTAGRAM,
+      created_at: new Date(),
+      updated_at: new Date(),
+    }));
+
+    return this.postModel.insertMany(formattedPosts);
+  }
+
+  public async createTwitterPost(posts: ITwitterPosts[]): Promise<PostModel[]> {
+    const formattedPosts: PostModel[] = posts.map((post) => ({
+      url: post.url,
+      post_id: post.id,
+      bookmarks_count: post.bookmarks,
+      description: post.description,
+      repost_count: post.reposts,
+      comment_count: post.replies,
+      likes: post.likes,
+      pictures: post.photos,
+      view_count: post.views,
+      videos: post.videos,
+      is_verified: post.is_verified,
+      origin: ContentOriginEnum.TWITTER,
       created_at: new Date(),
       updated_at: new Date(),
     }));

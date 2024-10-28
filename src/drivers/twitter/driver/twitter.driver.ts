@@ -8,4 +8,4 @@ import { Injectable } from '@nestjs/common';
  * https://developer.x.com/en/docs/authentication/oauth-2-0/bearer-tokens
  */
 @Injectable()
-export class TwitterService extends BaseDriver {}
+export class TwitterDriver extends BaseDriver {}

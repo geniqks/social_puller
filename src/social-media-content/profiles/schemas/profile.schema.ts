@@ -48,6 +48,7 @@ export class ProfileModel {
   @Prop()
   public full_name?: string;
 
+  // only for instagram
   @Prop()
   public is_private!: boolean;
 
