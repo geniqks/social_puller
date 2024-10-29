@@ -1,3 +1,5 @@
+import { LogType } from '@core/log/enums/log-types.enum';
+import { LogService } from '@core/log/services/log.service';
 import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
@@ -44,6 +46,7 @@ export class BrightdataService {
   constructor(
     private readonly brightDataMonitorRepository: BrightDataMonitorRepository,
     private readonly httpService: HttpService,
+    private readonly logService: LogService,
     readonly configService: ConfigService,
   ) {
     this.brightDataToken = configService.get<string>('BRIGHT_DATA_TOKEN');
@@ -109,6 +112,15 @@ export class BrightdataService {
     };
 
     await this.requestLimiter(brightDataQueryParams.dataset_id, urls);
+
+    for (const url of urls) {
+      this.logService.createLog({
+        metadatas: {
+          type: LogType.BRIGHTDATA_REQUEST,
+          url,
+        },
+      });
+    }
 
     const response = await this.triggerDataCollection(
       brightDataQueryParams,
