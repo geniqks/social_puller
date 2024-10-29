@@ -1,11 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ContentOriginEnum } from '@social-media-content/enum/content-origin.enum';
-import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import { PostContentTypeEnum } from '../enums/post-content-type.enum';
 
 // TODO: potentiellement mettre une date afin de pouvoir traquer l'évolution d'un post sur plusieurs jours ou mois
 // TODO: ne jamais supprimer une data antierieur aux posts
-export type PostDocument = HydratedDocument<PostModel>;
 @Schema()
 export class PostModel {
   // URL of the post

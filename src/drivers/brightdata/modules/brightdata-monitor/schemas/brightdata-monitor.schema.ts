@@ -1,9 +1,5 @@
 import { BrightDataStatusEnum } from '@drivers/brightdata/enums/bright-data-status.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-
-export type BrightDataMonitorDocument =
-  HydratedDocument<BrightDataMonitorModel>;
 
 /**
  * This model will be used to monitor the request to BrightData

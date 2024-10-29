@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ContentOriginEnum } from '@social-media-content/enum/content-origin.enum';
 import { Model } from 'mongoose';
+import { PostContentTypeEnum } from '../enums/post-content-type.enum';
 import { PostModel } from '../schemas/post.schema';
 
 @Injectable()
@@ -44,6 +45,7 @@ export class PostRepository {
     const formattedPosts: PostModel[] = posts.map((post) => ({
       url: post.url,
       post_id: post.id,
+      content_type: PostContentTypeEnum.TWEET,
       bookmarks_count: post.bookmarks,
       description: post.description,
       repost_count: post.reposts,

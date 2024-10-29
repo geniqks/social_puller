@@ -1,7 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-
-export type ProfileDocument = HydratedDocument<ProfileModel>;
 
 // TODO: for instagram and twitter, all post from user account are in the profile response
 // TODO: potentiellement créer un moniteur pour pouvoir suivre l'évolution des followers, posts, etc
