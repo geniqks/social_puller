@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { LogModel } from '../schemas/log.schema';
 import { LogRepository } from '../repositories/log.repository';
+import { LogModel } from '../schemas/log.schema';
 
 @Injectable()
 export class LogService {

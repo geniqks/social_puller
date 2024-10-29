@@ -9,7 +9,7 @@ export class LogRepository {
     @InjectModel(LogModel.name) private readonly logModel: Model<LogModel>,
   ) {}
 
-  public async createLog(log: LogModel) {
+  public async createLog(log: LogModel): Promise<LogModel> {
     return this.logModel.create(log);
   }
 }

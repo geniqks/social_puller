@@ -1,11 +1,16 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { LogType } from '../enums/log-types.enum';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { LogTypeEnum } from '../enums/log-types.enum';
 
 @Schema()
 export class LogMetadatas {
-  @Prop({ type: String, enum: LogType })
-  type: LogType;
+  @Prop({
+    type: String,
+    enum: LogTypeEnum,
+  })
+  type: LogTypeEnum;
 
   @Prop({ type: String })
   url?: string;
 }
+
+export const LogMetadatasSchema = SchemaFactory.createForClass(LogMetadatas);

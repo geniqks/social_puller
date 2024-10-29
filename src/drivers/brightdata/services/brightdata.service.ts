@@ -1,4 +1,4 @@
-import { LogType } from '@core/log/enums/log-types.enum';
+import { LogTypeEnum } from '@core/log/enums/log-types.enum';
 import { LogService } from '@core/log/services/log.service';
 import { HttpService } from '@nestjs/axios';
 import {
@@ -12,13 +12,13 @@ import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { catchError, firstValueFrom } from 'rxjs';
-import { BrightDataStatusEnum } from '../enums/bright-data-status.enum';
 import {
   BrightDataResponse,
   IBrightDataQueryParams,
   IBrightDataResponse,
 } from '../interfaces/brightdata.interface';
 import { BrightDataMonitorRepository } from '../modules/brightdata-monitor/repositories/brightdata-monitor.repository';
+import { BrightDataStatusEnum } from '../enums/bright-data-status.enum';
 
 @Injectable()
 export class BrightdataService {
@@ -113,14 +113,17 @@ export class BrightdataService {
 
     await this.requestLimiter(brightDataQueryParams.dataset_id, urls);
 
-    for (const url of urls) {
-      this.logService.createLog({
-        metadatas: {
-          type: LogType.BRIGHTDATA_REQUEST,
-          url,
-        },
-      });
-    }
+    // Create logs for each url
+    await Promise.all(
+      urls.map(async (url) => {
+        this.logService.createLog({
+          metadatas: {
+            type: LogTypeEnum.BRIGHTDATA_REQUEST,
+            url,
+          },
+        });
+      }),
+    );
 
     const response = await this.triggerDataCollection(
       brightDataQueryParams,
