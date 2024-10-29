@@ -1,3 +1,4 @@
+import { CoreModule } from '@core/core.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,7 +7,7 @@ import { DriversModule } from './drivers/drivers.module';
 import { SocialMediaContentModule } from './social-media-content/social-media-content.module';
 
 @Module({
-  imports: [CommonModule, DriversModule, SocialMediaContentModule],
+  imports: [CommonModule, DriversModule, SocialMediaContentModule, CoreModule],
   controllers: [AppController],
   providers: [AppService],
 })

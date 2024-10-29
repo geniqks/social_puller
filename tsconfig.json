@@ -21,6 +21,7 @@
       "@common/*": ["./src/common/*"],
       "@drivers/*": ["./src/drivers/*"],
       "@social-media-content/*": ["./src/social-media-content/*"],
+      "@core/*": ["./src/core/*"]
     }
   }
 }
