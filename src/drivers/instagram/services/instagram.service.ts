@@ -16,6 +16,8 @@ export class InstagramService {
     private readonly profileRepository: ProfileRepository,
   ) {}
 
+  // TODO: for posts and profile, we should check if the content is already in the database
+  // TODO: We should create a model to track the datas from the posts and profiles, to have a history of the datas
   public async registerPosts(posts: IInstagramPosts[]) {
     const formattedPosts =
       await this.brightDataService.filterAndCleanBrightDataResponses(posts);
