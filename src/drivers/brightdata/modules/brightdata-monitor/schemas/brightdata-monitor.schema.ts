@@ -13,6 +13,7 @@ export class BrightDataMonitorModel {
   @Prop()
   public dataset_id!: string;
 
+  /** Called api endpoint */
   @Prop()
   public url!: string;
 
