@@ -68,6 +68,9 @@ export class EnvironmentVariables {
 
   @IsString()
   TWITTER_BEARER_TOKEN: string;
+
+  @IsString()
+  JWT_SECRET: string;
 }
 
 export function validate(config: Record<string, unknown>) {
